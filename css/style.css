@@ -1,5 +1,69 @@
-/* Hides any element that has the "hidden" class.
-   JavaScript will add and remove this class to switch screens and tabs. */
+/* ---------- 1. COLOUR PALETTE (change colours here, applies everywhere) ---------- */
+:root {
+  --black: #0d0d0d;
+  --surface: #1a1a1a;
+  --border: #333333;
+  --green: #22c55e;
+  --green-dark: #16a34a;
+  --white: #ffffff;
+  --muted: #b3b3b3;
+}
+
+/* ---------- 2. RESET ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ---------- 3. PAGE LAYOUT ---------- */
+body {
+  font-family: "Segoe UI", system-ui, Arial, sans-serif;
+  background-color: var(--black);
+  color: var(--white);
+  line-height: 1.5;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+/* ---------- 4. HEADER ---------- */
+.topbar {
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid var(--green);
+}
+
+.topbar h1 {
+  font-size: 1.6rem;
+  color: var(--white);
+}
+
+.topbar p {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ---------- 5. FOOTER ---------- */
+footer {
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+}
+
+/* ---------- 6. UTILITY ---------- */
+/* Hides any element with the "hidden" class.
+   JavaScript will add and remove this to switch screens and tabs. */
 .hidden {
   display: none;
 }
