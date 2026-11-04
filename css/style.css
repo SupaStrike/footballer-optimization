@@ -1,0 +1,5 @@
+/* Hides any element that has the "hidden" class.
+   JavaScript will add and remove this class to switch screens and tabs. */
+.hidden {
+  display: none;
+}
