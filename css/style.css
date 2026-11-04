@@ -61,9 +61,94 @@ footer {
   border-top: 1px solid var(--border);
 }
 
-/* ---------- 6. UTILITY ---------- */
+/* ---------- 6. CARD (each "screen" is shown as a card) ---------- */
+.view {
+  width: min(640px, 100%);
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--green);
+  border-radius: 10px;
+  padding: 1.25rem 1.5rem;
+}
+
+/* ---------- 7. FORM ---------- */
+#player-form {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.9rem 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+/* first three fields (age, weight, height) share the top row */
+.field:nth-child(-n+3) {
+  grid-column: span 2;
+}
+
+/* last two fields (fitness, position) share the second row */
+.field:nth-child(n+4) {
+  grid-column: span 3;
+}
+
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+input,
+select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.55rem 0.7rem;
+  background-color: var(--black);
+  color: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+select option {
+  background-color: var(--surface);
+  color: var(--white);
+}
+
+input:focus,
+select:focus {
+  outline: 2px solid var(--green);
+  border-color: var(--green);
+}
+
+button[type="submit"] {
+  grid-column: 1 / -1;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.7rem;
+  margin-top: 0.3rem;
+  background-color: var(--green);
+  color: var(--black);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--green-dark);
+}
+
+button[type="submit"]:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* ---------- 8. UTILITY ---------- */
 /* Hides any element with the "hidden" class.
-   JavaScript will add and remove this to switch screens and tabs. */
+   JavaScript will add and remove this to switch screens and tabs.
+   Keep this LAST so it overrides the rules above. */
 .hidden {
   display: none;
 }
