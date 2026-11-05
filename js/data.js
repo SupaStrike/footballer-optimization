@@ -279,6 +279,209 @@ const POSITION_DATA = {
         ]
       }
     }
+  },
+
+  "goalkeeper": {
+    label: "Goalkeeper",
+    hydrationNote: "Goalkeepers run less than outfield players, but concentration drops quickly when you are short of fluid. Keep a bottle in your goal and drink at every stoppage.",
+    dietFocus: "Your work comes in short, explosive bursts, so eat protein and carbohydrate regularly and keep your meals balanced.",
+    injuryRisks: [
+      "Finger and wrist injuries from catching and punching the ball",
+      "Shoulder strain from diving and throwing",
+      "Knee and ankle injuries from landing after dives and jumps"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed and reactions",
+        focus: "Fast first steps and quick reactions",
+        exercises: [
+          { name: "Short sprints", detail: "8 x 5m from a ready stance. Walk back to recover." },
+          { name: "Reaction catches", detail: "A partner throws a ball off a wall for you to catch. 10 reps, 3 rounds." },
+          { name: "Sprint to claim", detail: "Start on your line, sprint 10m to claim a cross. 6 reps." },
+          { name: "Jump and catch", detail: "Jump to catch a thrown ball at full stretch. 8 reps." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Staying alert and sharp for the whole match",
+        exercises: [
+          { name: "Easy base jog", detail: "15 minutes at a comfortable pace." },
+          { name: "Interval runs", detail: "4 x 1 minute steady running, 90 seconds walking between." },
+          { name: "Shuttle runs", detail: "10m out and back for 30 seconds. Rest 60 seconds. Repeat 4 times." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "Strong legs, shoulders and core for diving and jumping",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Push-ups", detail: "Use your knees or a wall at first. Keep your body in a straight line." },
+          { name: "Plank", detail: "Hold a straight line from head to heels." },
+          { name: "Single-leg balance", detail: "30 seconds each leg. Close your eyes once it feels easy." }
+        ]
+      },
+      agility: {
+        title: "Agility and handling",
+        focus: "Moving across the goal and getting down to the ball",
+        exercises: [
+          { name: "Goal-width shuffles", detail: "Shuffle side to side across the goal without crossing your feet. 6 rounds." },
+          { name: "Cone footwork", detail: "Quick feet through 6 cones, then set and catch a ball. 4 rounds." },
+          { name: "Diving practice", detail: "Only on soft grass or a mat, with a coach there. 5 dives each side." }
+        ]
+      }
+    }
+  },
+
+  "winger": {
+    label: "Winger",
+    hydrationNote: "Wingers sprint again and again, so sweat a lot. Drink at every break and finish your bottle before you start the next session.",
+    dietFocus: "Repeated sprinting uses a lot of energy, so carbohydrate before training and a protein-and-carbohydrate meal after are both important.",
+    injuryRisks: [
+      "Hamstring strains from top-speed sprinting",
+      "Ankle sprains when dribbling and being tackled",
+      "Knee strain from sharp turns and cuts"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed",
+        focus: "Top speed and repeated sprints down the wing",
+        exercises: [
+          { name: "Acceleration sprints", detail: "6 x 20m from a standing start. Walk back to recover." },
+          { name: "Flying sprints", detail: "5 x 30m, building to top speed. Rest 90 seconds." },
+          { name: "Sprint with the ball", detail: "Push the ball 10m ahead and sprint after it. 6 reps." },
+          { name: "Repeat sprints", detail: "6 x 20m with 30 seconds rest between. Rest 2 minutes, then repeat once." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Keeping your sprint speed late in the match",
+        exercises: [
+          { name: "Interval runs", detail: "6 x 1 minute hard running, 1 minute walking between." },
+          { name: "Shuttle runs", detail: "20m out and back 4 times without stopping. Rest 60 seconds. Repeat 5 times." },
+          { name: "Easy base jog", detail: "15-20 minutes at a comfortable pace." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "Strong legs for sprinting and turning",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Reverse lunges", detail: "Step back and keep your front knee over your ankle." },
+          { name: "Single-leg calf raises", detail: "Hold a wall for balance. Lift slowly." },
+          { name: "Glute bridges", detail: "Squeeze at the top for 2 seconds." }
+        ]
+      },
+      agility: {
+        title: "Agility",
+        focus: "Beating a defender with quick changes of direction",
+        exercises: [
+          { name: "Dribble and cut", detail: "Dribble at a cone, cut sharply past it and sprint 10m. 6 reps each side." },
+          { name: "Zig-zag runs", detail: "Run a zig-zag through 6 cones as fast as you can. 4 rounds." },
+          { name: "1v1 practice", detail: "Take on a partner defender for 10 seconds, then swap. 6 rounds." }
+        ]
+      }
+    }
+  },
+
+  "striker": {
+    label: "Striker",
+    hydrationNote: "Strikers sprint in short bursts and then wait for the ball, so it is easy to forget to drink. Sip at every break in play.",
+    dietFocus: "Your explosive finishing needs good energy, so eat carbohydrate before training and include protein after matches to help your muscles recover.",
+    injuryRisks: [
+      "Hamstring strains from sudden sprints",
+      "Ankle sprains when shooting and being challenged",
+      "Knee and groin strain from twisting to shoot"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed",
+        focus: "A sharp first step to get away from defenders",
+        exercises: [
+          { name: "Short sprints", detail: "8 x 10m from a standing start. Walk back to recover." },
+          { name: "Run in behind", detail: "Jog, then sprint 25m onto a pass from a partner. 6 reps." },
+          { name: "Sprint and shoot", detail: "Sprint 15m onto a rolled ball and shoot. 6 reps." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Pressing and making repeated runs",
+        exercises: [
+          { name: "Interval runs", detail: "5 x 1 minute hard running, 90 seconds walking between." },
+          { name: "Shuttle runs", detail: "20m out and back 4 times without stopping. Rest 60 seconds. Repeat 4 times." },
+          { name: "Easy base jog", detail: "15 minutes at a comfortable pace." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "Power to hold off defenders and shoot",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Step-ups", detail: "Use a sturdy step or bench. Drive through your heel." },
+          { name: "Glute bridges", detail: "Squeeze at the top for 2 seconds." },
+          { name: "Plank and side plank", detail: "Hold 20-30 seconds each side." },
+          { name: "Soft-landing jumps", detail: "Jump up and land softly with bent knees. 6 reps." }
+        ]
+      },
+      agility: {
+        title: "Agility",
+        focus: "Turning quickly and finishing",
+        exercises: [
+          { name: "Check and turn", detail: "Jog forwards, check back, turn and sprint 10m. 6 reps." },
+          { name: "Cone footwork and shot", detail: "Quick feet through 5 cones, then shoot. 6 rounds." },
+          { name: "Hold-up turn", detail: "With a partner pressing lightly, receive the ball, turn and pass. 8 reps." }
+        ]
+      }
+    }
+  },
+
+  "not-sure": {
+    label: "All-rounder",
+    hydrationNote: "Since you play in different areas, drink at every break and keep a bottle close during sessions.",
+    dietFocus: "A balanced mix of carbohydrate, protein and fruit and vegetables works well while you are working out which position suits you.",
+    injuryRisks: [
+      "Hamstring strains from sprinting",
+      "Ankle sprains from tackling and changing direction",
+      "Overuse pain in the shins or knees if you increase training too quickly"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed",
+        focus: "A quick first step and good top speed",
+        exercises: [
+          { name: "Acceleration sprints", detail: "6 x 20m from a standing start. Walk back to recover." },
+          { name: "Flying sprints", detail: "4 x 30m, building to top speed. Rest 90 seconds." },
+          { name: "Sprint with the ball", detail: "Push the ball 10m ahead and sprint after it. 5 reps." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Staying strong for the whole match",
+        exercises: [
+          { name: "Interval runs", detail: "5 x 1 minute hard running, 90 seconds walking between." },
+          { name: "Shuttle runs", detail: "20m out and back 4 times without stopping. Rest 60 seconds. Repeat 4 times." },
+          { name: "Steady run", detail: "15-20 minutes at a pace where you can still talk." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "A strong base for every position",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Walking lunges", detail: "Step forward and keep your front knee over your ankle." },
+          { name: "Glute bridges", detail: "Squeeze at the top for 2 seconds." },
+          { name: "Plank", detail: "Hold a straight line from head to heels." }
+        ]
+      },
+      agility: {
+        title: "Agility",
+        focus: "Quick feet and changes of direction",
+        exercises: [
+          { name: "Side-shuffle cones", detail: "5 cones, 2m apart. Shuffle through facing forward. 4 rounds." },
+          { name: "Zig-zag runs", detail: "Run a zig-zag through 6 cones as fast as you can. 4 rounds." },
+          { name: "Dribble and turn", detail: "Dribble 10m, turn, dribble back. 6 reps." }
+        ]
+      }
+    }
   }
 
 };
