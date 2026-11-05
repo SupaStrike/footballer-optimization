@@ -137,28 +137,49 @@ const POSITION_DATA = {
       source: "Add your diet source here (check it first)"
     },
 
-    injury: {
+        injury: {
+      evidence: "In controlled trials, teams that used the FIFA 11+ warm-up had roughly 30-46% fewer injuries than teams that used a normal warm-up. It works best when it is done regularly.",
+      schedule: "Do this for 15-20 minutes before training, at least 2 times a week, in place of your normal warm-up.",
       risks: [
         "Hamstring strains from repeated sprinting",
         "Ankle sprains when tackling and changing direction",
         "Groin pain from sudden changes of direction and stretching for the ball"
       ],
-      warmup: [
-        "5 minutes of easy jogging",
-        "Leg swings forwards and sideways, 10 each leg",
-        "Walking lunges with a twist, 8 each side",
-        "High knees and heel flicks, 2 x 15m",
-        "3 gradual sprints, building up from 50% to 80% effort"
+      parts: [
+        {
+          title: "Part 1: Running and activation",
+          exercises: [
+            "Easy jogging, 2-3 minutes",
+            "Leg swings forwards and sideways, 10 each leg",
+            "Walking lunges with a hip twist, 8 each side",
+            "High knees and heel flicks, 2 x 15m"
+          ]
+        },
+        {
+          title: "Part 2: Strength, balance and jumping",
+          exercises: [
+            "Slow hamstring bridges, 10 reps",
+            "Single-leg balance, 30 seconds each leg",
+            "Squats with your knees over your toes, 10 reps",
+            "Small jumps, landing softly with bent knees, 8 reps"
+          ]
+        },
+        {
+          title: "Part 3: Fast running and direction changes",
+          exercises: [
+            "Run 30m at about 70% effort, 3 times",
+            "Run, plant one foot and change direction, 3 times each side",
+            "3 gradual sprints, building up from 50% to 80% effort"
+          ]
+        }
       ],
       prevention: [
-        "Do a proper warm-up before every session, at least 10 minutes.",
-        "Do balance work such as standing on one leg for 30 seconds on each side.",
-        "Include hamstring strengthening, such as slow bridges, every week.",
+        "Do the warm-up every session. Consistency matters more than perfection.",
         "Stretch your legs after training while your muscles are warm.",
+        "Learn the exercises with your coach first and keep your technique slow and controlled.",
         "If something hurts sharply, stop, rest and tell your coach. Do not play through pain."
       ],
-      source: "Add your injury prevention source here (check it first)"
+      source: "Patel & Shah (2025), Cureus 17(12): e100463. Systematic review of FIFA 11+ trials."
     }
   }
-
-};
+}
