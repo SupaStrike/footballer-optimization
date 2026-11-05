@@ -70,12 +70,74 @@ const HYDRATION = {
   source: "Add your hydration source here (check it first)"
 };
 
-/* ---------- 5. POSITION DATA ---------- */
+/* ---------- 5. DIET (shared meals, each position adds one focus line) ---------- */
+const DIET_SHARED = {
+  meals: [
+    { when: "Day before a match", ideas: "Pasta, rice or potatoes with a protein such as chicken, eggs, fish or lentils, plus vegetables." },
+    { when: "2-3 hours before kick-off", ideas: "A balanced meal, such as rice with chicken and vegetables, or a sandwich with fruit. Keep it low in grease." },
+    { when: "Within an hour after training or a match", ideas: "Protein and carbohydrate, such as milk and a banana, eggs on toast, or rice with dal or chicken." },
+    { when: "Every day", ideas: "Three regular meals with fruit and vegetables. Do not skip breakfast." }
+  ],
+  tips: [
+    "You are still growing, so eat regular meals. Do not cut food to lose weight.",
+    "Limit fizzy drinks, sweets and fried food, especially before a match."
+  ],
+  source: "Add your diet source here (check it first)"
+};
+
+/* ---------- 6. INJURY PREVENTION (shared warm-up, each position adds its risks) ---------- */
+const INJURY_SHARED = {
+  evidence: "In controlled trials, teams that used the FIFA 11+ warm-up had roughly 30-46% fewer injuries than teams that used a normal warm-up. It works best when it is done regularly.",
+  schedule: "Do this for 15-20 minutes before training, at least 2 times a week, in place of your normal warm-up.",
+  parts: [
+    {
+      title: "Part 1: Running and activation",
+      exercises: [
+        "Easy jogging, 2-3 minutes",
+        "Leg swings forwards and sideways, 10 each leg",
+        "Walking lunges with a hip twist, 8 each side",
+        "High knees and heel flicks, 2 x 15m"
+      ]
+    },
+    {
+      title: "Part 2: Strength, balance and jumping",
+      exercises: [
+        "Slow hamstring bridges, 10 reps",
+        "Single-leg balance, 30 seconds each leg",
+        "Squats with your knees over your toes, 10 reps",
+        "Small jumps, landing softly with bent knees, 8 reps"
+      ]
+    },
+    {
+      title: "Part 3: Fast running and direction changes",
+      exercises: [
+        "Run 30m at about 70% effort, 3 times",
+        "Run, plant one foot and change direction, 3 times each side",
+        "3 gradual sprints, building up from 50% to 80% effort"
+      ]
+    }
+  ],
+  prevention: [
+    "Do the warm-up every session. Consistency matters more than perfection.",
+    "Stretch your legs after training while your muscles are warm.",
+    "Learn the exercises with your coach first and keep your technique slow and controlled.",
+    "If something hurts sharply, stop, rest and tell your coach. Do not play through pain."
+  ],
+  source: "Patel & Shah (2025), Cureus 17(12): e100463. Systematic review of FIFA 11+ trials."
+};
+
+/* ---------- 7. POSITION DATA (only what differs between positions) ---------- */
 const POSITION_DATA = {
 
   "full-back": {
     label: "Full-back",
-
+    hydrationNote: "Full-backs cover a lot of ground up and down the touchline, so drink at every break in play, such as throw-ins and goal kicks.",
+    dietFocus: "Lots of running means you need plenty of carbohydrate for energy.",
+    injuryRisks: [
+      "Hamstring strains from repeated sprinting",
+      "Ankle sprains when tackling and changing direction",
+      "Groin pain from sudden changes of direction and stretching for the ball"
+    ],
     sessions: {
       speed: {
         title: "Speed",
@@ -87,7 +149,6 @@ const POSITION_DATA = {
           { name: "Overlap runs", detail: "Jog 10m, then sprint 30m along the touchline. 6 reps." }
         ]
       },
-
       endurance: {
         title: "Endurance",
         focus: "Repeated hard running for the whole match",
@@ -97,7 +158,6 @@ const POSITION_DATA = {
           { name: "Easy base jog", detail: "15-20 minutes at a comfortable pace." }
         ]
       },
-
       strength: {
         title: "Strength",
         focus: "Strong legs and core for tackling and changing direction",
@@ -108,7 +168,6 @@ const POSITION_DATA = {
           { name: "Plank", detail: "Hold a straight line from head to heels." }
         ]
       },
-
       agility: {
         title: "Agility",
         focus: "Quick direction changes and 1v1 defending",
@@ -118,68 +177,108 @@ const POSITION_DATA = {
           { name: "Jockeying drill", detail: "A partner dribbles at you. Back up on your toes for 30 seconds. 4 rounds." }
         ]
       }
-    },
+    }
+  },
 
-    hydrationNote: "Full-backs cover a lot of ground up and down the touchline, so drink at every break in play, such as throw-ins and goal kicks.",
+  "centre-back": {
+    label: "Centre-back",
+    hydrationNote: "Centre-backs run less than other outfield players but make many short, hard efforts. Drink at every stoppage, especially before and after set pieces.",
+    dietFocus: "Strength and power matter most for you, so include protein at every meal along with your carbohydrate.",
+    injuryRisks: [
+      "Ankle sprains when landing after heading the ball",
+      "Hamstring strains when turning to chase a long ball",
+      "Knee and shin knocks from physical contact"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed",
+        focus: "Short, sharp bursts and recovery runs",
+        exercises: [
+          { name: "Short sprints", detail: "8 x 10m from a standing start. Walk back to recover." },
+          { name: "Turn and chase", detail: "Jog forwards, turn on a signal and sprint 20m. 6 reps." },
+          { name: "Backpedal to sprint", detail: "5 x (10m backwards, turn, 20m sprint)." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Staying sharp for the whole match",
+        exercises: [
+          { name: "Interval runs", detail: "5 x 1 minute steady-hard running, 90 seconds walking between." },
+          { name: "Shuttle runs", detail: "10m, 20m and 30m out and back. Rest 60 seconds. Repeat 4 times." },
+          { name: "Easy base jog", detail: "15 minutes at a comfortable pace." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "Winning headers and tackles",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Step-ups", detail: "Use a sturdy step or bench. Drive through your heel." },
+          { name: "Glute bridges", detail: "Squeeze at the top for 2 seconds." },
+          { name: "Plank and side plank", detail: "Hold 20-30 seconds each side." },
+          { name: "Soft-landing jumps", detail: "Jump up and land softly with bent knees. 6 reps." }
+        ]
+      },
+      agility: {
+        title: "Agility",
+        focus: "Turning quickly and staying balanced",
+        exercises: [
+          { name: "Side-shuffle and turn", detail: "Shuffle 5m, turn and sprint 10m. 6 reps." },
+          { name: "Cone footwork", detail: "Quick feet through 6 cones, then a 10m sprint. 4 rounds." },
+          { name: "Header practice", detail: "With a coach, practise timing a jump to meet a thrown ball. 8 reps." }
+        ]
+      }
+    }
+  },
 
-    diet: {
-      focus: "Lots of running means you need plenty of carbohydrate for energy.",
-      meals: [
-        { when: "Day before a match", ideas: "Pasta, rice or potatoes with a protein such as chicken, eggs, fish or lentils, plus vegetables." },
-        { when: "2-3 hours before kick-off", ideas: "A balanced meal, such as rice with chicken and vegetables, or a sandwich with fruit. Keep it low in grease." },
-        { when: "Within an hour after training or a match", ideas: "Protein and carbohydrate, such as milk and a banana, eggs on toast, or rice with dal or chicken." },
-        { when: "Every day", ideas: "Three regular meals with fruit and vegetables. Do not skip breakfast." }
-      ],
-      tips: [
-        "You are still growing, so eat regular meals. Do not cut food to lose weight.",
-        "Limit fizzy drinks, sweets and fried food, especially before a match."
-      ],
-      source: "Add your diet source here (check it first)"
-    },
-
-        injury: {
-      evidence: "In controlled trials, teams that used the FIFA 11+ warm-up had roughly 30-46% fewer injuries than teams that used a normal warm-up. It works best when it is done regularly.",
-      schedule: "Do this for 15-20 minutes before training, at least 2 times a week, in place of your normal warm-up.",
-      risks: [
-        "Hamstring strains from repeated sprinting",
-        "Ankle sprains when tackling and changing direction",
-        "Groin pain from sudden changes of direction and stretching for the ball"
-      ],
-      parts: [
-        {
-          title: "Part 1: Running and activation",
-          exercises: [
-            "Easy jogging, 2-3 minutes",
-            "Leg swings forwards and sideways, 10 each leg",
-            "Walking lunges with a hip twist, 8 each side",
-            "High knees and heel flicks, 2 x 15m"
-          ]
-        },
-        {
-          title: "Part 2: Strength, balance and jumping",
-          exercises: [
-            "Slow hamstring bridges, 10 reps",
-            "Single-leg balance, 30 seconds each leg",
-            "Squats with your knees over your toes, 10 reps",
-            "Small jumps, landing softly with bent knees, 8 reps"
-          ]
-        },
-        {
-          title: "Part 3: Fast running and direction changes",
-          exercises: [
-            "Run 30m at about 70% effort, 3 times",
-            "Run, plant one foot and change direction, 3 times each side",
-            "3 gradual sprints, building up from 50% to 80% effort"
-          ]
-        }
-      ],
-      prevention: [
-        "Do the warm-up every session. Consistency matters more than perfection.",
-        "Stretch your legs after training while your muscles are warm.",
-        "Learn the exercises with your coach first and keep your technique slow and controlled.",
-        "If something hurts sharply, stop, rest and tell your coach. Do not play through pain."
-      ],
-      source: "Patel & Shah (2025), Cureus 17(12): e100463. Systematic review of FIFA 11+ trials."
+  "midfielder": {
+    label: "Midfielder",
+    hydrationNote: "Midfielders run more than almost anyone on the pitch, so start sessions well hydrated and sip at every break.",
+    dietFocus: "You cover the most ground in a match, so carbohydrate is your main fuel. Do not skip meals before training.",
+    injuryRisks: [
+      "Hamstring strains from long periods of running",
+      "Groin pain from lots of passing and turning",
+      "Overuse pain in the shins or knees from heavy running loads"
+    ],
+    sessions: {
+      speed: {
+        title: "Speed",
+        focus: "Quick bursts to get on the ball and support play",
+        exercises: [
+          { name: "Short bursts", detail: "8 x 15m from a jog. Walk back to recover." },
+          { name: "Pass and sprint", detail: "Pass to a partner, sprint 20m to receive it back. 6 reps." },
+          { name: "Third-man run", detail: "Jog, then sprint 25m into space on a signal. 5 reps." }
+        ]
+      },
+      endurance: {
+        title: "Endurance",
+        focus: "Box-to-box running for the whole match",
+        exercises: [
+          { name: "Long intervals", detail: "5 x 3 minutes steady-hard running, 1 minute walking between." },
+          { name: "Shuttle runs", detail: "20m out and back 6 times without stopping. Rest 60 seconds. Repeat 5 times." },
+          { name: "Steady run", detail: "20 minutes at a pace where you can still talk." }
+        ]
+      },
+      strength: {
+        title: "Strength",
+        focus: "A strong base for running, turning and tackling",
+        exercises: [
+          { name: "Squats", detail: "Feet shoulder-width apart. Keep your chest up." },
+          { name: "Reverse lunges", detail: "Step back and keep your front knee over your ankle." },
+          { name: "Step-ups", detail: "Use a sturdy step or bench. Drive through your heel." },
+          { name: "Dead bug", detail: "Lie on your back and move opposite arm and leg slowly. Keep your back flat." }
+        ]
+      },
+      agility: {
+        title: "Agility",
+        focus: "Turning quickly and finding space",
+        exercises: [
+          { name: "Dribble and turn", detail: "Dribble 10m, turn, dribble back. 6 reps." },
+          { name: "Cone weave", detail: "Weave through 6 cones with the ball, then pass. 4 rounds." },
+          { name: "Check-and-go", detail: "Jog forwards, check back, then sprint away on a signal. 6 reps." }
+        ]
+      }
     }
   }
-}
+
+};
