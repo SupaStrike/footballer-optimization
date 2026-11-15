@@ -99,8 +99,6 @@ function renderExercisePlan(plan) {
       block.appendChild(el("p", "day-sets", day.sets + ". " + day.ageNote));
     }
 
-      addSource(exercisePanel, plan.source);
-
     const list = el("ul", "exercise-list");
     day.exercises.forEach(function (ex) {
       const item = el("li");
@@ -112,6 +110,9 @@ function renderExercisePlan(plan) {
 
     exercisePanel.appendChild(block);
   });
+
+  // Runs once, after all the days have been added
+  addSource(exercisePanel, plan.source);
 }
 
 /* ---------- RENDER: DIET TAB ---------- */
