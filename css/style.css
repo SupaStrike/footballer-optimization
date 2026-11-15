@@ -241,6 +241,60 @@ select {
   color: var(--black);
 }
 
+/* ---------- EXERCISE PLAN ---------- */
+.form-error {
+  grid-column: 1 / -1;
+  color: #f87171;
+  font-size: 0.85rem;
+}
+
+.plan-intro {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 0.7rem;
+}
+
+.day-block {
+  padding-bottom: 0.8rem;
+  margin-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.day-block:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.day-title {
+  font-size: 1rem;
+  color: var(--green);
+}
+
+.day-focus {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.3rem;
+}
+
+.day-sets {
+  font-size: 0.85rem;
+  margin-bottom: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  border-left: 3px solid var(--green);
+  background-color: var(--surface);
+}
+
+.exercise-list {
+  list-style: none;
+}
+
+.exercise-list li {
+  font-size: 0.9rem;
+  padding: 0.15rem 0;
+}
+
+
 /* ---------- 8. UTILITY ---------- */
 /* Hides any element with the "hidden" class.
    JavaScript will add and remove this to switch screens and tabs.
