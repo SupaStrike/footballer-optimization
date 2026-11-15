@@ -75,7 +75,8 @@ function buildWeeklyPlan(position, fitness, age) {
     positionLabel: pos.label,
     fitness: fitness,
     ageBand: ageBand,
-    days: days
+    days: days,
+    source: EXERCISE_SOURCE
   };
 }
 

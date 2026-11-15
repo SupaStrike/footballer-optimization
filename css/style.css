@@ -223,6 +223,26 @@ select {
   font-size: 0.95rem;
 }
 
+/* Scrollbar in the green and black theme */
+.tab-panel {
+  scrollbar-width: thin;
+  scrollbar-color: var(--green-dark) var(--black);
+}
+
+/* Fallback for older browsers that don't support scrollbar-color */
+@supports not (scrollbar-color: auto) {
+  .tab-panel::-webkit-scrollbar {
+    width: 10px;
+  }
+  .tab-panel::-webkit-scrollbar-track {
+    background: var(--black);
+  }
+  .tab-panel::-webkit-scrollbar-thumb {
+    background: var(--green-dark);
+    border-radius: 6px;
+  }
+}
+
 #edit-btn {
   font-family: inherit;
   font-size: 0.9rem;

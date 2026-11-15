@@ -62,12 +62,12 @@ const HYDRATION = {
     { maxKg: 999, ml: 250, label: "40 kg or more" }
   ],
   general: [
-    "Check your urine colour before training. Pale yellow means you are well hydrated. Dark yellow or orange means you need to drink more.",
-    "Start drinking early. Do not wait until you feel thirsty, because young players often start sessions already short of fluid.",
-    "After training, keep drinking steadily for the next hour."
+    "Check your urine colour before training. Pale yellow, like lemonade, means you are well hydrated. Dark yellow or orange means you need to drink more.",
+    "Start drinking early. Many young players begin training already short of fluid, and relying on thirst alone usually means you only replace about half of what you sweat out.",
+    "Drink at any break in play, and keep drinking steadily for the hour after training."
   ],
   hotWeather: "In hot or humid weather, drink a little more, take extra water breaks and rest in the shade when you can.",
-  source: "Add your hydration source here (check it first)"
+  source: "Laitano, Runco & Baker (2014), Gatorade Sports Science Institute, Sports Science Exchange #128. The amounts shown are a general guide, because sweat rates differ between players."
 };
 
 /* ---------- 5. DIET (shared meals, each position adds one focus line) ---------- */
@@ -125,6 +125,9 @@ const INJURY_SHARED = {
   ],
   source: "Patel & Shah (2025), Cureus 17(12): e100463. Systematic review of FIFA 11+ trials."
 };
+
+/* ---------- EXERCISE SOURCE ---------- */
+const EXERCISE_SOURCE = "Bujnovsky et al. (2019), Sports 7(2): 46, and Causevic et al. (2025), Sensors 25(18): 5825. Both studies found that physical demands differ by playing position.";
 
 /* ---------- 7. POSITION DATA (only what differs between positions) ---------- */
 const POSITION_DATA = {

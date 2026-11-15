@@ -99,6 +99,8 @@ function renderExercisePlan(plan) {
       block.appendChild(el("p", "day-sets", day.sets + ". " + day.ageNote));
     }
 
+      addSource(exercisePanel, plan.source);
+
     const list = el("ul", "exercise-list");
     day.exercises.forEach(function (ex) {
       const item = el("li");
