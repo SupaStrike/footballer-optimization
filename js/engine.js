@@ -78,3 +78,54 @@ function buildWeeklyPlan(position, fitness, age) {
     days: days
   };
 }
+
+/* ---------- 5. BUILD THE HYDRATION ADVICE ---------- */
+// The amount depends on body weight; the extra note depends on position.
+// Returns null if the position or weight is not valid.
+function buildHydration(position, weightKg) {
+  const pos = POSITION_DATA[position];
+  const band = getHydrationBand(weightKg);
+  if (!pos || !band) return null;
+
+  return {
+    amountMl: band.ml,
+    everyMinutes: 20,
+    weightGroup: band.label,
+    positionNote: pos.hydrationNote,
+    general: HYDRATION.general,
+    hotWeather: HYDRATION.hotWeather,
+    source: HYDRATION.source
+  };
+}
+
+/* ---------- 6. BUILD THE DIET ADVICE ---------- */
+// Shared meals and tips for everyone, plus a focus line for the position.
+// Returns null if the position is not valid.
+function buildDiet(position) {
+  const pos = POSITION_DATA[position];
+  if (!pos) return null;
+
+  return {
+    focus: pos.dietFocus,
+    meals: DIET_SHARED.meals,
+    tips: DIET_SHARED.tips,
+    source: DIET_SHARED.source
+  };
+}
+
+/* ---------- 7. BUILD THE INJURY PREVENTION ADVICE ---------- */
+// Shared warm-up and habits for everyone, plus the injury risks for the position.
+// Returns null if the position is not valid.
+function buildInjury(position) {
+  const pos = POSITION_DATA[position];
+  if (!pos) return null;
+
+  return {
+    evidence: INJURY_SHARED.evidence,
+    schedule: INJURY_SHARED.schedule,
+    risks: pos.injuryRisks,
+    parts: INJURY_SHARED.parts,
+    prevention: INJURY_SHARED.prevention,
+    source: INJURY_SHARED.source
+  };
+}
