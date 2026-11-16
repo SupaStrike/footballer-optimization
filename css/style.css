@@ -88,7 +88,7 @@ footer {
   grid-column: span 2;
 }
 
-/* last two fields (fitness, position) share the second row */
+/* last two fields (training days, position) share the second row */
 .field:nth-child(n+4) {
   grid-column: span 3;
 }
@@ -114,6 +114,29 @@ select {
 select option {
   background-color: var(--surface);
   color: var(--white);
+}
+
+/* Remove the up/down spinner arrows from number inputs */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Replace the default dropdown arrow with a green one */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 2.2rem;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5l6 6 6-6' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
 }
 
 input:focus,
@@ -145,27 +168,10 @@ button[type="submit"]:focus-visible {
   outline-offset: 2px;
 }
 
-/* Remove the up/down spinner arrows from number inputs */
-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield;
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Replace the default dropdown arrow with a green one */
-select {
-  -webkit-appearance: none;
-  appearance: none;
-  padding-right: 2.2rem;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5l6 6 6-6' fill='none' stroke='%2322c55e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0.8rem center;
+.form-error {
+  grid-column: 1 / -1;
+  color: #f87171;
+  font-size: 0.85rem;
 }
 
 /* ---------- 8. RESULTS SCREEN ---------- */
@@ -212,9 +218,10 @@ select {
   outline-offset: 2px;
 }
 
+/* The panel takes the height left over after the header, tabs, button and footer.
+   Content scrolls inside the panel, so the page itself does not scroll. */
 .tab-panel {
-  min-height: 190px;
-  max-height: 38vh;
+  height: clamp(110px, calc(100vh - 390px), 380px);
   overflow-y: auto;
   padding: 0.9rem 1rem;
   background-color: var(--black);
@@ -261,13 +268,7 @@ select {
   color: var(--black);
 }
 
-/* ---------- EXERCISE PLAN ---------- */
-.form-error {
-  grid-column: 1 / -1;
-  color: #f87171;
-  font-size: 0.85rem;
-}
-
+/* ---------- 9. EXERCISE PLAN ---------- */
 .plan-intro {
   color: var(--muted);
   font-size: 0.85rem;
@@ -314,7 +315,7 @@ select {
   padding: 0.15rem 0;
 }
 
-/* ---------- OTHER TABS (diet, hydration, injury) ---------- */
+/* ---------- 10. OTHER TABS (diet, hydration, injury) ---------- */
 .section-heading {
   font-size: 0.95rem;
   color: var(--green);
@@ -366,8 +367,41 @@ select {
   border-top: 1px solid var(--border);
 }
 
+/* ---------- 11. SMALL SCREENS (phones and narrow windows) ---------- */
+@media (max-width: 560px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+  }
 
-/* ---------- 8. UTILITY ---------- */
+  main {
+    padding: 1rem;
+  }
+
+  .view {
+    padding: 1rem;
+  }
+
+  .field:nth-child(-n+3),
+  .field:nth-child(n+4) {
+    grid-column: span 6;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tab-panel {
+    height: auto;
+    max-height: 55vh;
+  }
+
+  .topbar h1 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ---------- 12. UTILITY ---------- */
 /* Hides any element with the "hidden" class.
    JavaScript will add and remove this to switch screens and tabs.
    Keep this LAST so it overrides the rules above. */

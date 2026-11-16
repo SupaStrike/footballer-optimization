@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Footballer Optimization</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2322c55e'/%3E%3C/svg%3E">
 </head>
 <body>
 
@@ -34,12 +35,16 @@
         </div>
 
         <div class="field">
-          <label for="fitness">Fitness level</label>
-          <select id="fitness" name="fitness" required>
-            <option value="">Select your level</option>
-            <option value="beginner">Beginner (train 0-1 times a week)</option>
-            <option value="intermediate">Intermediate (train 2-3 times a week)</option>
-            <option value="advanced">Advanced (train 4+ times a week)</option>
+          <label for="days">Training days per week</label>
+          <select id="days" name="days" required>
+            <option value="">Select days</option>
+            <option value="1">1 day a week</option>
+            <option value="2">2 days a week</option>
+            <option value="3">3 days a week</option>
+            <option value="4">4 days a week</option>
+            <option value="5">5 days a week</option>
+            <option value="6">6 days a week</option>
+            <option value="7">7 days a week</option>
           </select>
         </div>
 
@@ -65,7 +70,7 @@
 
     <section id="view-results" class="view hidden">
 
-      <div id="player-summary">Full-back, age 15, intermediate</div>
+      <div id="player-summary"></div>
 
       <div class="tabs" role="tablist">
         <button type="button" class="tab active" data-tab="exercise" role="tab" aria-selected="true">Exercise</button>

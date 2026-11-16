@@ -29,10 +29,6 @@ function el(tag, className, text) {
   return node;
 }
 
-function capitalise(word) {
-  return word.charAt(0).toUpperCase() + word.slice(1);
-}
-
 function addHeading(parent, text) {
   parent.appendChild(el("h3", "section-heading", text));
 }
@@ -47,6 +43,10 @@ function addList(parent, items) {
 
 function addSource(parent, text) {
   parent.appendChild(el("p", "source-line", "Based on: " + text));
+}
+
+function daysText(count) {
+  return count + (count === 1 ? " day" : " days");
 }
 
 /* ---------- SCREENS AND TABS ---------- */
@@ -85,10 +85,11 @@ tabButtons.forEach(function (btn) {
 function renderExercisePlan(plan) {
   exercisePanel.textContent = "";
 
-  exercisePanel.appendChild(el(
-    "p", "plan-intro",
-    "Your weekly plan has " + plan.days.length + " training days. Rest on the other days."
-  ));
+  let intro = "Your weekly plan has " + daysText(plan.daysPerWeek) + ". Rest on the other days.";
+  if (plan.daysPerWeek === 7) {
+    intro = "Your weekly plan covers all 7 days. The recovery days are light, so do not skip them.";
+  }
+  exercisePanel.appendChild(el("p", "plan-intro", intro));
 
   plan.days.forEach(function (day) {
     const block = el("div", "day-block");
@@ -121,6 +122,10 @@ function renderDiet(diet) {
 
   dietPanel.appendChild(el("p", "lead", diet.focus));
 
+  if (diet.bmiNote) {
+    dietPanel.appendChild(el("p", "day-sets", diet.bmiNote));
+  }
+
   addHeading(dietPanel, "What to eat and when");
   const mealList = el("ul", "plain-list");
   diet.meals.forEach(function (meal) {
@@ -147,10 +152,13 @@ function renderHydration(h) {
   ));
   hydrationPanel.appendChild(el(
     "p", "amount-detail",
-    "while training or playing (weight group: " + h.weightGroup + "). This is a guide, so drink more if you are very thirsty."
+    "while training or playing, based on your weight. Drink more if you are very thirsty."
   ));
 
   hydrationPanel.appendChild(el("p", "lead", h.positionNote));
+
+  addHeading(hydrationPanel, "Check your own sweat loss");
+  hydrationPanel.appendChild(el("p", "lead", h.weighTip));
 
   addHeading(hydrationPanel, "Good habits");
   addList(hydrationPanel, h.general.concat([h.hotWeather]));
@@ -188,11 +196,11 @@ form.addEventListener("submit", function (event) {
   const age = document.getElementById("age").value;
   const weight = document.getElementById("weight").value;
   const height = document.getElementById("height").value;
-  const fitness = document.getElementById("fitness").value;
+  const days = document.getElementById("days").value;
   const position = document.getElementById("position").value;
 
-  const plan = buildWeeklyPlan(position, fitness, age);
-  const diet = buildDiet(position);
+  const plan = buildWeeklyPlan(position, days, age);
+  const diet = buildDiet(position, weight, height);
   const hydration = buildHydration(position, weight);
   const injury = buildInjury(position);
 
@@ -204,7 +212,7 @@ form.addEventListener("submit", function (event) {
   summaryBox.textContent =
     plan.positionLabel + " | Age " + Number(age) + " | " +
     Number(weight) + " kg | " + Number(height) + " cm | " +
-    capitalise(fitness);
+    plan.daysPerWeek + (plan.daysPerWeek === 1 ? " day" : " days") + " a week";
 
   renderExercisePlan(plan);
   renderDiet(diet);

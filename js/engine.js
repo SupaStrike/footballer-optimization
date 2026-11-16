@@ -15,19 +15,30 @@ function getAgeBand(age) {
   return null;
 }
 
-/* ---------- 2. HYDRATION BAND ---------- */
-// Finds which weight band a player falls into (see HYDRATION.bands).
-// Returns the whole band object, or null if the weight is not valid.
-function getHydrationBand(weightKg) {
+/* ---------- 2. FLUID AMOUNT (ml every 20 minutes) ---------- */
+// Scales smoothly with body weight, between a minimum and a maximum.
+// Returns null if the weight is not valid.
+function getFluidMl(weightKg) {
   const w = Number(weightKg);
   if (!(w > 0)) return null;
-  for (const band of HYDRATION.bands) {
-    if (w < band.maxKg) return band;
-  }
-  return null;
+  const raw = HYDRATION.baseMl + HYDRATION.mlPerKg * (w - HYDRATION.baseKg);
+  const clamped = Math.min(HYDRATION.maxMl, Math.max(HYDRATION.minMl, raw));
+  return Math.round(clamped / 10) * 10;
 }
 
-/* ---------- 3. FIND ONE SESSION ---------- */
+/* ---------- 3. BMI BAND ---------- */
+// Returns "low", "normal" or "high", or null if height or weight is not valid.
+function getBmiBand(weightKg, heightCm) {
+  const w = Number(weightKg);
+  const h = Number(heightCm) / 100;
+  if (!(w > 0) || !(h > 0)) return null;
+  const bmi = w / (h * h);
+  if (bmi < BMI_LIMITS.low) return "low";
+  if (bmi >= BMI_LIMITS.high) return "high";
+  return "normal";
+}
+
+/* ---------- 4. FIND ONE SESSION ---------- */
 // Looks up a session by type, e.g. getSession("striker", "speed").
 // Recovery is shared by all positions; the others belong to the position.
 // Returns null if nothing matches.
@@ -38,15 +49,17 @@ function getSession(position, type) {
   return pos.sessions[type] || null;
 }
 
-/* ---------- 4. BUILD THE WEEKLY PLAN ---------- */
-// Combines position + fitness level + age into a week of sessions.
+/* ---------- 5. BUILD THE WEEKLY PLAN ---------- */
+// Combines position + training days per week (1-7) + age into a week of sessions.
 // Strength sessions also get the sets and safety note for the player's age.
 // Returns null if any input is not valid.
-function buildWeeklyPlan(position, fitness, age) {
-  const template = WEEK_TEMPLATES[fitness];
+function buildWeeklyPlan(position, trainingDays, age) {
+  const dayCount = Number(trainingDays);
   const ageBand = getAgeBand(age);
   const pos = POSITION_DATA[position];
 
+  if (!Number.isInteger(dayCount) || dayCount < 1 || dayCount > 7) return null;
+  const template = WEEK_TEMPLATES[dayCount];
   if (!template || !ageBand || !pos) return null;
 
   const rules = AGE_BANDS[ageBand];
@@ -73,25 +86,29 @@ function buildWeeklyPlan(position, fitness, age) {
   return {
     position: position,
     positionLabel: pos.label,
-    fitness: fitness,
+    daysPerWeek: dayCount,
     ageBand: ageBand,
     days: days,
     source: EXERCISE_SOURCE
   };
 }
 
-/* ---------- 5. BUILD THE HYDRATION ADVICE ---------- */
+/* ---------- 6. BUILD THE HYDRATION ADVICE ---------- */
 // The amount depends on body weight; the extra note depends on position.
 // Returns null if the position or weight is not valid.
 function buildHydration(position, weightKg) {
   const pos = POSITION_DATA[position];
-  const band = getHydrationBand(weightKg);
-  if (!pos || !band) return null;
+  const ml = getFluidMl(weightKg);
+  if (!pos || ml === null) return null;
+
+  const limitKg = Math.round(Number(weightKg) * 0.02 * 10) / 10;
 
   return {
-    amountMl: band.ml,
+    amountMl: ml,
     everyMinutes: 20,
-    weightGroup: band.label,
+    weighTip: "Weigh yourself in light clothing before and after training. If you lose more than about " +
+      limitKg + " kg, which is 2% of your body weight, you did not drink enough. " +
+      "Keep drinking over the next few hours until you are back to your starting weight.",
     positionNote: pos.hydrationNote,
     general: HYDRATION.general,
     hotWeather: HYDRATION.hotWeather,
@@ -99,22 +116,27 @@ function buildHydration(position, weightKg) {
   };
 }
 
-/* ---------- 6. BUILD THE DIET ADVICE ---------- */
-// Shared meals and tips for everyone, plus a focus line for the position.
+/* ---------- 7. BUILD THE DIET ADVICE ---------- */
+// Shared meals and tips for everyone, a focus line for the position,
+// and a note based on BMI (null when BMI is in the normal range).
 // Returns null if the position is not valid.
-function buildDiet(position) {
+function buildDiet(position, weightKg, heightCm) {
   const pos = POSITION_DATA[position];
   if (!pos) return null;
 
+  const band = getBmiBand(weightKg, heightCm);
+  const bmiNote = (band && BMI_NOTES[band]) ? BMI_NOTES[band] : null;
+
   return {
     focus: pos.dietFocus,
+    bmiNote: bmiNote,
     meals: DIET_SHARED.meals,
     tips: DIET_SHARED.tips,
     source: DIET_SHARED.source
   };
 }
 
-/* ---------- 7. BUILD THE INJURY PREVENTION ADVICE ---------- */
+/* ---------- 8. BUILD THE INJURY PREVENTION ADVICE ---------- */
 // Shared warm-up and habits for everyone, plus the injury risks for the position.
 // Returns null if the position is not valid.
 function buildInjury(position) {
