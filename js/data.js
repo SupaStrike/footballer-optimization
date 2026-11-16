@@ -21,50 +21,78 @@ const AGE_BANDS = {
 };
 
 /* ---------- 2. WEEKLY TEMPLATES (by training days per week, 1 to 7) ---------- */
+// "core" slots rotate through CORE_TYPES from week to week.
+// "recovery" slots stay as recovery every week.
+const CORE_TYPES = ["strength", "speed", "endurance", "agility"];
+
 const WEEK_TEMPLATES = {
   1: [
-    { day: "Saturday", type: "strength" }
+    { day: "Saturday", type: "core" }
   ],
   2: [
-    { day: "Monday", type: "strength" },
-    { day: "Thursday", type: "speed" }
+    { day: "Monday", type: "core" },
+    { day: "Thursday", type: "core" }
   ],
   3: [
-    { day: "Monday", type: "endurance" },
-    { day: "Wednesday", type: "strength" },
-    { day: "Saturday", type: "speed" }
+    { day: "Monday", type: "core" },
+    { day: "Wednesday", type: "core" },
+    { day: "Saturday", type: "core" }
   ],
   4: [
-    { day: "Monday", type: "strength" },
-    { day: "Tuesday", type: "endurance" },
-    { day: "Thursday", type: "speed" },
-    { day: "Saturday", type: "agility" }
+    { day: "Monday", type: "core" },
+    { day: "Tuesday", type: "core" },
+    { day: "Thursday", type: "core" },
+    { day: "Saturday", type: "core" }
   ],
   5: [
-    { day: "Monday", type: "strength" },
-    { day: "Tuesday", type: "speed" },
-    { day: "Wednesday", type: "agility" },
-    { day: "Friday", type: "endurance" },
+    { day: "Monday", type: "core" },
+    { day: "Tuesday", type: "core" },
+    { day: "Wednesday", type: "core" },
+    { day: "Friday", type: "core" },
     { day: "Saturday", type: "recovery" }
   ],
   6: [
-    { day: "Monday", type: "strength" },
-    { day: "Tuesday", type: "speed" },
-    { day: "Wednesday", type: "agility" },
+    { day: "Monday", type: "core" },
+    { day: "Tuesday", type: "core" },
+    { day: "Wednesday", type: "core" },
     { day: "Thursday", type: "recovery" },
-    { day: "Friday", type: "endurance" },
-    { day: "Saturday", type: "strength" }
+    { day: "Friday", type: "core" },
+    { day: "Saturday", type: "core" }
   ],
   7: [
-    { day: "Monday", type: "strength" },
-    { day: "Tuesday", type: "speed" },
+    { day: "Monday", type: "core" },
+    { day: "Tuesday", type: "core" },
     { day: "Wednesday", type: "recovery" },
-    { day: "Thursday", type: "agility" },
-    { day: "Friday", type: "endurance" },
-    { day: "Saturday", type: "strength" },
+    { day: "Thursday", type: "core" },
+    { day: "Friday", type: "core" },
+    { day: "Saturday", type: "core" },
     { day: "Sunday", type: "recovery" }
   ]
 };
+
+/* ---------- 2b. FOUR-WEEK PROGRESSION ---------- */
+const WEEK_PHASES = [
+  {
+    week: 1,
+    name: "Foundation",
+    note: "Take it easy and learn each exercise. Aim for about 6 out of 10 effort and stop each exercise while it still feels comfortable."
+  },
+  {
+    week: 2,
+    name: "Build",
+    note: "Add one extra round to each speed, endurance and agility drill. Aim for about 7 out of 10 effort. For strength, follow the sets in your age guide and make your reps slower and cleaner."
+  },
+  {
+    week: 3,
+    name: "Push",
+    note: "Add one more round to each speed, endurance and agility drill and shorten your rests by 10 seconds. Aim for about 8 out of 10 effort, but keep your technique clean. For strength, follow your age guide."
+  },
+  {
+    week: 4,
+    name: "Lighter week",
+    note: "Go back to the Week 1 amounts so your body can recover and come back stronger. After this week, start again from Week 1 and add a little more if it felt easy."
+  }
+];
 
 /* ---------- 3. SESSIONS THAT ARE THE SAME FOR EVERY POSITION ---------- */
 const SHARED_SESSIONS = {

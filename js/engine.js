@@ -49,8 +49,10 @@ function getSession(position, type) {
   return pos.sessions[type] || null;
 }
 
-/* ---------- 5. BUILD THE WEEKLY PLAN ---------- */
-// Combines position + training days per week (1-7) + age into a week of sessions.
+/* ---------- 5. BUILD THE FOUR-WEEK PLAN ---------- */
+// Combines position + training days per week (1-7) + age into four weeks.
+// "core" days rotate through strength, speed, endurance and agility from
+// week to week, so even a 1-day player gets every type over the month.
 // Strength sessions also get the sets and safety note for the player's age.
 // Returns null if any input is not valid.
 function buildWeeklyPlan(position, trainingDays, age) {
@@ -64,31 +66,48 @@ function buildWeeklyPlan(position, trainingDays, age) {
 
   const rules = AGE_BANDS[ageBand];
 
-  const days = template.map(function (slot) {
-    const session = getSession(position, slot.type);
-    if (!session) return null;
+  const weeks = WEEK_PHASES.map(function (phase, weekIndex) {
+    let coreSlot = 0;
 
-    const entry = {
-      day: slot.day,
-      type: slot.type,
-      title: session.title,
-      focus: session.focus,
-      exercises: session.exercises
+    const days = template.map(function (slot) {
+      let type = slot.type;
+      if (type === "core") {
+        type = CORE_TYPES[(coreSlot + weekIndex) % CORE_TYPES.length];
+        coreSlot++;
+      }
+
+      const session = getSession(position, type);
+      if (!session) return null;
+
+      const entry = {
+        day: slot.day,
+        type: type,
+        title: session.title,
+        focus: session.focus,
+        exercises: session.exercises
+      };
+
+      if (type === "strength") {
+        entry.sets = rules.sets;
+        entry.ageNote = rules.note;
+      }
+      return entry;
+    }).filter(Boolean);
+
+    return {
+      week: phase.week,
+      name: phase.name,
+      note: phase.note,
+      days: days
     };
-
-    if (slot.type === "strength") {
-      entry.sets = rules.sets;
-      entry.ageNote = rules.note;
-    }
-    return entry;
-  }).filter(Boolean);
+  });
 
   return {
     position: position,
     positionLabel: pos.label,
     daysPerWeek: dayCount,
     ageBand: ageBand,
-    days: days,
+    weeks: weeks,
     source: EXERCISE_SOURCE
   };
 }

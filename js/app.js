@@ -19,6 +19,9 @@ const dietPanel = document.getElementById("tab-diet");
 const hydrationPanel = document.getElementById("tab-hydration");
 const injuryPanel = document.getElementById("tab-injury");
 
+// The plan currently on screen (so the week buttons can redraw it)
+let currentPlan = null;
+
 /* ---------- HELPERS ---------- */
 // Creates an element with optional class and text.
 // Uses textContent (not innerHTML), which is safer.
@@ -81,17 +84,47 @@ tabButtons.forEach(function (btn) {
   });
 });
 
-/* ---------- RENDER: EXERCISE TAB ---------- */
+/* ---------- RENDER: EXERCISE TAB (four weeks) ---------- */
 function renderExercisePlan(plan) {
+  currentPlan = plan;
+  showWeek(0);
+}
+
+// Draws one week of the plan, with buttons to jump between weeks.
+function showWeek(weekIndex) {
+  const plan = currentPlan;
+  const week = plan.weeks[weekIndex];
+
   exercisePanel.textContent = "";
 
-  let intro = "Your weekly plan has " + daysText(plan.daysPerWeek) + ". Rest on the other days.";
+  // Week buttons
+  const weekTabs = el("div", "week-tabs");
+  plan.weeks.forEach(function (w, i) {
+    const btn = el("button", "week-tab", "Week " + w.week);
+    btn.type = "button";
+    btn.classList.toggle("active", i === weekIndex);
+    btn.addEventListener("click", function () {
+      showWeek(i);
+    });
+    weekTabs.appendChild(btn);
+  });
+  exercisePanel.appendChild(weekTabs);
+
+  // Intro for this week
+  exercisePanel.appendChild(el(
+    "h3", "section-heading",
+    "Week " + week.week + ": " + week.name
+  ));
+  exercisePanel.appendChild(el("p", "plan-intro", week.note));
+
+  let intro = "This week has " + daysText(plan.daysPerWeek) + ". Rest on the other days.";
   if (plan.daysPerWeek === 7) {
-    intro = "Your weekly plan covers all 7 days. The recovery days are light, so do not skip them.";
+    intro = "This week covers all 7 days. The recovery days are light, so do not skip them.";
   }
   exercisePanel.appendChild(el("p", "plan-intro", intro));
 
-  plan.days.forEach(function (day) {
+  // The training days
+  week.days.forEach(function (day) {
     const block = el("div", "day-block");
     block.appendChild(el("h3", "day-title", day.day + ": " + day.title));
     block.appendChild(el("p", "day-focus", day.focus));
@@ -114,6 +147,8 @@ function renderExercisePlan(plan) {
 
   // Runs once, after all the days have been added
   addSource(exercisePanel, plan.source);
+
+  exercisePanel.scrollTop = 0;
 }
 
 /* ---------- RENDER: DIET TAB ---------- */
@@ -212,7 +247,7 @@ form.addEventListener("submit", function (event) {
   summaryBox.textContent =
     plan.positionLabel + " | Age " + Number(age) + " | " +
     Number(weight) + " kg | " + Number(height) + " cm | " +
-    plan.daysPerWeek + (plan.daysPerWeek === 1 ? " day" : " days") + " a week";
+    daysText(plan.daysPerWeek) + " a week";
 
   renderExercisePlan(plan);
   renderDiet(diet);

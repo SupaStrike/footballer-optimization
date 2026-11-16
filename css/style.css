@@ -367,6 +367,43 @@ button[type="submit"]:focus-visible {
   border-top: 1px solid var(--border);
 }
 
+/* ---------- WEEK BUTTONS (inside the Exercise tab) ---------- */
+.week-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 0.7rem;
+}
+
+.week-tab {
+  flex: 1;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.3rem;
+  background-color: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.week-tab:hover {
+  color: var(--white);
+  border-color: var(--green);
+}
+
+.week-tab.active {
+  background-color: var(--green);
+  color: var(--black);
+  border-color: var(--green);
+}
+
+.week-tab:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+
 /* ---------- 11. SMALL SCREENS (phones and narrow windows) ---------- */
 @media (max-width: 560px) {
   body {
