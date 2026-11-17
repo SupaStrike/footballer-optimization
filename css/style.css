@@ -403,12 +403,111 @@ button[type="submit"]:focus-visible {
   outline-offset: 2px;
 }
 
+/* ---------- WELCOME SCREEN ---------- */
+.welcome {
+  text-align: center;
+}
+
+.welcome-title {
+  font-size: 1.6rem;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.welcome-lead {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 1.1rem;
+}
+
+.feature-grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.7rem;
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+.feature {
+  background-color: var(--black);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--green);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+}
+
+.feature h3 {
+  font-size: 0.9rem;
+  color: var(--green);
+  margin-bottom: 0.25rem;
+}
+
+.feature p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.primary-btn {
+  width: 100%;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.7rem;
+  background-color: var(--green);
+  color: var(--black);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.primary-btn:hover {
+  background-color: var(--green-dark);
+}
+
+.primary-btn:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+.welcome-note {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.6rem;
+}
+
+/* Small text button used for "Back to start" */
+.link-btn {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.7rem;
+  padding: 0;
+  background: none;
+  color: var(--muted);
+  border: none;
+  cursor: pointer;
+}
+
+.link-btn:hover {
+  color: var(--green);
+}
+
+.link-btn:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
 
 /* ---------- 11. SMALL SCREENS (phones and narrow windows) ---------- */
 @media (max-width: 560px) {
   body {
     height: auto;
     min-height: 100vh;
+      .feature-grid {
+    grid-template-columns: 1fr;
+  }
   }
 
   main {

@@ -16,7 +16,34 @@
 
   <main>
 
-    <section id="view-form" class="view">
+    <!-- SCREEN 1: WELCOME -->
+    <section id="view-welcome" class="view welcome">
+
+      <h2 class="welcome-title">Train for your position</h2>
+      <p class="welcome-lead">A free plan built around your position, age, size and the days you can train.</p>
+
+      <ul class="feature-grid">
+        <li class="feature">
+          <h3>Position-based training</h3>
+          <p>Four-week plans that change with your position, age and training days.</p>
+        </li>
+        <li class="feature">
+          <h3>Food and hydration</h3>
+          <p>Meal timing and fluid amounts matched to your weight.</p>
+        </li>
+        <li class="feature">
+          <h3>Injury prevention</h3>
+          <p>A warm-up based on research, plus the injury risks for your position.</p>
+        </li>
+      </ul>
+
+      <button type="button" id="start-btn" class="primary-btn">Get started</button>
+      <p class="welcome-note">Free to use. No sign-up. Your details are not sent anywhere.</p>
+
+    </section>
+
+    <!-- SCREEN 2: FORM -->
+    <section id="view-form" class="view hidden">
       <form id="player-form">
 
         <div class="field">
@@ -66,8 +93,11 @@
         <p id="form-error" class="form-error" role="alert"></p>
 
       </form>
+
+      <button type="button" id="back-btn" class="link-btn">&larr; Back to start</button>
     </section>
 
+    <!-- SCREEN 3: RESULTS -->
     <section id="view-results" class="view hidden">
 
       <div id="player-summary"></div>

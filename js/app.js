@@ -4,11 +4,14 @@
    shows the results, and switches between the screens.
    ===================================================== */
 
+const welcomeView = document.getElementById("view-welcome");
 const formView = document.getElementById("view-form");
 const resultsView = document.getElementById("view-results");
 const form = document.getElementById("player-form");
 const formError = document.getElementById("form-error");
 const summaryBox = document.getElementById("player-summary");
+const startBtn = document.getElementById("start-btn");
+const backBtn = document.getElementById("back-btn");
 const editBtn = document.getElementById("edit-btn");
 
 const tabButtons = document.querySelectorAll(".tab");
@@ -53,14 +56,11 @@ function daysText(count) {
 }
 
 /* ---------- SCREENS AND TABS ---------- */
-function showResultsScreen() {
-  formView.classList.add("hidden");
-  resultsView.classList.remove("hidden");
-}
-
-function showFormScreen() {
-  resultsView.classList.add("hidden");
-  formView.classList.remove("hidden");
+// Only one of the three screens is visible at a time.
+function showScreen(name) {
+  welcomeView.classList.toggle("hidden", name !== "welcome");
+  formView.classList.toggle("hidden", name !== "form");
+  resultsView.classList.toggle("hidden", name !== "results");
 }
 
 // Shows one tab and hides the others.
@@ -223,6 +223,16 @@ function renderInjury(inj) {
   addSource(injuryPanel, inj.source);
 }
 
+/* ---------- WELCOME AND BACK BUTTONS ---------- */
+startBtn.addEventListener("click", function () {
+  showScreen("form");
+  document.getElementById("age").focus();
+});
+
+backBtn.addEventListener("click", function () {
+  showScreen("welcome");
+});
+
 /* ---------- WHEN THE FORM IS SUBMITTED ---------- */
 form.addEventListener("submit", function (event) {
   event.preventDefault();   // stops the page from reloading
@@ -255,10 +265,12 @@ form.addEventListener("submit", function (event) {
   renderInjury(injury);
 
   showTab("exercise");
-  showResultsScreen();
+  showScreen("results");
 });
 
 /* ---------- EDIT MY DETAILS ---------- */
 // Goes back to the form with the old values still filled in,
 // so the player can change one thing and generate a new plan.
-editBtn.addEventListener("click", showFormScreen);
+editBtn.addEventListener("click", function () {
+  showScreen("form");
+});
