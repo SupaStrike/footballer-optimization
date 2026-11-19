@@ -499,6 +499,90 @@ button[type="submit"]:focus-visible {
   outline-offset: 2px;
 }
 
+/* ---------- LEARN SCREEN ---------- */
+.learn-tabs {
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.learn-tabs .week-tab {
+  flex: 1 1 auto;
+  min-width: 80px;
+}
+
+/* Full-width outlined button, used for "Learn the theory" */
+.outline-btn {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 0.6rem;
+  padding: 0.6rem;
+  background-color: transparent;
+  color: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.outline-btn:hover {
+  background-color: var(--green);
+  color: var(--black);
+}
+
+.outline-btn:focus-visible {
+  outline: 2px solid var(--white);
+  outline-offset: 2px;
+}
+
+/* ---------- LEARN: FORMATIONS AND PRINCIPLES ---------- */
+.pitch {
+  width: 100%;
+  max-width: 360px;
+  margin: 0.4rem auto 0.6rem;
+}
+
+.pitch svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.formation-card {
+  padding-bottom: 0.9rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.formation-card:last-of-type {
+  border-bottom: none;
+}
+
+.principle {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--green);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  margin-bottom: 0.7rem;
+}
+
+.principle-summary {
+  font-size: 0.9rem;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.principle-row {
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: 0.15rem 0;
+}
+
+.principle-row strong {
+  color: var(--white);
+}
+
 
 /* ---------- 11. SMALL SCREENS (phones and narrow windows) ---------- */
 @media (max-width: 560px) {

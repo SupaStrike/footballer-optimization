@@ -4,6 +4,11 @@
    right advice from data.js. Does not touch the page.
    ===================================================== */
 
+// True only if the object really has this key (stops odd values like "constructor")
+function has(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
+}
+
 /* ---------- 1. AGE BAND ---------- */
 // Turns an age like 15 into the key "15-17" used in AGE_BANDS.
 // Returns null if the age is outside 12-20.
@@ -16,14 +21,22 @@ function getAgeBand(age) {
 }
 
 /* ---------- 2. FLUID AMOUNT (ml every 20 minutes) ---------- */
-// Scales smoothly with body weight, between a minimum and a maximum.
-// Returns null if the weight is not valid.
-function getFluidMl(weightKg) {
+// Scales smoothly with body weight, then adjusts for the climate.
+// Returns null if the weight or climate is not valid.
+function getFluidMl(weightKg, climate) {
   const w = Number(weightKg);
   if (!(w > 0)) return null;
+
+  const key = climate || DEFAULT_CLIMATE;
+  if (!has(HYDRATION.climates, key)) return null;
+
   const raw = HYDRATION.baseMl + HYDRATION.mlPerKg * (w - HYDRATION.baseKg);
-  const clamped = Math.min(HYDRATION.maxMl, Math.max(HYDRATION.minMl, raw));
-  return Math.round(clamped / 10) * 10;
+  const base = Math.min(HYDRATION.maxMl, Math.max(HYDRATION.minMl, raw));
+  const adjusted = Math.min(
+    HYDRATION.hotMaxMl,
+    Math.max(HYDRATION.minMl, base * HYDRATION.climates[key].factor)
+  );
+  return Math.round(adjusted / 10) * 10;
 }
 
 /* ---------- 3. BMI BAND ---------- */
@@ -43,10 +56,9 @@ function getBmiBand(weightKg, heightCm) {
 // Recovery is shared by all positions; the others belong to the position.
 // Returns null if nothing matches.
 function getSession(position, type) {
-  if (SHARED_SESSIONS[type]) return SHARED_SESSIONS[type];
-  const pos = POSITION_DATA[position];
-  if (!pos) return null;
-  return pos.sessions[type] || null;
+  if (has(SHARED_SESSIONS, type)) return SHARED_SESSIONS[type];
+  if (!has(POSITION_DATA, position)) return null;
+  return POSITION_DATA[position].sessions[type] || null;
 }
 
 /* ---------- 5. BUILD THE FOUR-WEEK PLAN ---------- */
@@ -58,11 +70,12 @@ function getSession(position, type) {
 function buildWeeklyPlan(position, trainingDays, age) {
   const dayCount = Number(trainingDays);
   const ageBand = getAgeBand(age);
-  const pos = POSITION_DATA[position];
 
   if (!Number.isInteger(dayCount) || dayCount < 1 || dayCount > 7) return null;
+  if (!has(POSITION_DATA, position)) return null;
+  const pos = POSITION_DATA[position];
   const template = WEEK_TEMPLATES[dayCount];
-  if (!template || !ageBand || !pos) return null;
+  if (!template || !ageBand) return null;
 
   const rules = AGE_BANDS[ageBand];
 
@@ -113,12 +126,15 @@ function buildWeeklyPlan(position, trainingDays, age) {
 }
 
 /* ---------- 6. BUILD THE HYDRATION ADVICE ---------- */
-// The amount depends on body weight; the extra note depends on position.
-// Returns null if the position or weight is not valid.
-function buildHydration(position, weightKg) {
+// The amount depends on body weight and climate; the extra note depends on position.
+// Returns null if the position, weight or climate is not valid.
+function buildHydration(position, weightKg, climate) {
+  if (!has(POSITION_DATA, position)) return null;
   const pos = POSITION_DATA[position];
-  const ml = getFluidMl(weightKg);
-  if (!pos || ml === null) return null;
+
+  const key = climate || DEFAULT_CLIMATE;
+  const ml = getFluidMl(weightKg, key);
+  if (ml === null) return null;
 
   const limitKg = Math.round(Number(weightKg) * 0.02 * 10) / 10;
 
@@ -129,28 +145,38 @@ function buildHydration(position, weightKg) {
       limitKg + " kg, which is 2% of your body weight, you did not drink enough. " +
       "Keep drinking over the next few hours until you are back to your starting weight.",
     positionNote: pos.hydrationNote,
+    climateNote: HYDRATION.climates[key].note,
     general: HYDRATION.general,
-    hotWeather: HYDRATION.hotWeather,
     source: HYDRATION.source
   };
 }
 
 /* ---------- 7. BUILD THE DIET ADVICE ---------- */
-// Shared meals and tips for everyone, a focus line for the position,
-// and a note based on BMI (null when BMI is in the normal range).
-// Returns null if the position is not valid.
-function buildDiet(position, weightKg, heightCm) {
+// Shared meals for everyone, with food ideas that match what the player eats,
+// a focus line for the position, and a note based on BMI (null when normal).
+// Returns null if the position or food type is not valid.
+function buildDiet(position, weightKg, heightCm, food) {
+  if (!has(POSITION_DATA, position)) return null;
   const pos = POSITION_DATA[position];
-  if (!pos) return null;
+
+  const foodKey = food || DEFAULT_FOOD;
+  if (!has(DIET_SHARED.foodTips, foodKey)) return null;
 
   const band = getBmiBand(weightKg, heightCm);
   const bmiNote = (band && BMI_NOTES[band]) ? BMI_NOTES[band] : null;
 
+  const meals = DIET_SHARED.meals.map(function (meal) {
+    return {
+      when: meal.when,
+      ideas: typeof meal.ideas === "string" ? meal.ideas : meal.ideas[foodKey]
+    };
+  });
+
   return {
     focus: pos.dietFocus,
     bmiNote: bmiNote,
-    meals: DIET_SHARED.meals,
-    tips: DIET_SHARED.tips,
+    meals: meals,
+    tips: DIET_SHARED.tips.concat(DIET_SHARED.foodTips[foodKey]),
     source: DIET_SHARED.source
   };
 }
@@ -159,8 +185,8 @@ function buildDiet(position, weightKg, heightCm) {
 // Shared warm-up and habits for everyone, plus the injury risks for the position.
 // Returns null if the position is not valid.
 function buildInjury(position) {
+  if (!has(POSITION_DATA, position)) return null;
   const pos = POSITION_DATA[position];
-  if (!pos) return null;
 
   return {
     evidence: INJURY_SHARED.evidence,

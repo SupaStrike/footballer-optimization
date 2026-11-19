@@ -187,7 +187,7 @@ function renderHydration(h) {
   ));
   hydrationPanel.appendChild(el(
     "p", "amount-detail",
-    "while training or playing, based on your weight. Drink more if you are very thirsty."
+    "while training or playing, based on your weight and climate. Drink more if you are very thirsty."
   ));
 
   hydrationPanel.appendChild(el("p", "lead", h.positionNote));
@@ -196,7 +196,7 @@ function renderHydration(h) {
   hydrationPanel.appendChild(el("p", "lead", h.weighTip));
 
   addHeading(hydrationPanel, "Good habits");
-  addList(hydrationPanel, h.general.concat([h.hotWeather]));
+  addList(hydrationPanel, h.general.concat([h.climateNote]));
 
   addSource(hydrationPanel, h.source);
 }
@@ -243,10 +243,12 @@ form.addEventListener("submit", function (event) {
   const height = document.getElementById("height").value;
   const days = document.getElementById("days").value;
   const position = document.getElementById("position").value;
+  const climate = document.getElementById("climate").value;
+  const food = document.getElementById("food").value;
 
   const plan = buildWeeklyPlan(position, days, age);
-  const diet = buildDiet(position, weight, height);
-  const hydration = buildHydration(position, weight);
+  const diet = buildDiet(position, weight, height, food);
+  const hydration = buildHydration(position, weight, climate);
   const injury = buildInjury(position);
 
   if (!plan || !diet || !hydration || !injury) {

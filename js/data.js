@@ -111,34 +111,93 @@ const SHARED_SESSIONS = {
 // Fluid per 20 minutes = baseMl + mlPerKg x (weight - baseKg), kept between minMl and maxMl.
 // baseKg and baseMl come from the American Academy of Pediatrics guide
 // (150 ml for 40 kg, 250 ml for 60 kg).
+// The climate factors (0.8, 1.0, 1.2) are an approximation: sweat loss rises with heat,
+// but the sources do not give an exact percentage.
+const DEFAULT_CLIMATE = "warm";
+
 const HYDRATION = {
   baseKg: 40,
   baseMl: 150,
   mlPerKg: 5,
   minMl: 100,
   maxMl: 400,
+  hotMaxMl: 500,
+  climates: {
+    cool: {
+      factor: 0.8,
+      note: "In cool weather you still sweat, so keep drinking at breaks even if you do not feel thirsty."
+    },
+    warm: {
+      factor: 1.0,
+      note: "In warm weather, bring your bottle to every session and drink at every break."
+    },
+    hot: {
+      factor: 1.2,
+      note: "In hot and humid weather you sweat more. Drink a little more than usual, take extra water breaks in the shade, and eat something salty after training. If you feel dizzy, sick or get a bad headache, stop and tell your coach straight away."
+    }
+  },
   general: [
     "Check your urine colour before training. Pale yellow, like lemonade, means you are well hydrated. Dark yellow or orange means you need to drink more.",
     "Start drinking early. Many young players begin training already short of fluid, and relying on thirst alone usually means you only replace about half of what you sweat out.",
     "Drink at any break in play, and keep drinking steadily for the hour after training."
   ],
-  hotWeather: "In hot or humid weather, drink a little more, take extra water breaks and rest in the shade when you can.",
   source: "American Academy of Pediatrics (2000), Climatic Heat Stress and the Exercising Child and Adolescent, Pediatrics 106: 158-159; Laitano, Runco & Baker (2014), Gatorade Sports Science Institute SSE #128; Bergeron (2016), Gatorade Sports Science Institute SSE #158. Sweat rates differ between players, so the amount is a guide."
 };
 
 /* ---------- 5. DIET (shared meals, each position adds one focus line) ---------- */
+// "ideas" can be one text for everybody, or one text for each food type.
+const DEFAULT_FOOD = "everything";
+
 const DIET_SHARED = {
   meals: [
-    { when: "Day before a match", ideas: "Pasta, rice or potatoes with a protein such as chicken, eggs, fish or lentils, plus vegetables." },
-    { when: "At least 3 hours before kick-off", ideas: "A balanced meal, such as rice with chicken and vegetables, or a sandwich with fruit. Keep it low in grease." },
-    { when: "In the last hour before kick-off", ideas: "Only a light carbohydrate snack, such as a banana or a cereal bar. Avoid heavy meals and large amounts of meat, which digest slowly. Skip caffeinated energy drinks." },
-    { when: "Within an hour after training or a match", ideas: "Protein and carbohydrate, such as milk and a banana, eggs on toast, or rice with dal or chicken." },
-    { when: "Every day", ideas: "Three regular meals with fruit and vegetables. Do not skip breakfast." }
+    {
+      when: "Day before a match",
+      ideas: {
+        everything: "Pasta, rice or potatoes with a protein such as chicken, eggs, fish or lentils, plus vegetables.",
+        eggs: "Pasta, rice or potatoes with a protein such as eggs, dal, paneer or curd, plus vegetables.",
+        vegetarian: "Pasta, rice or potatoes with a protein such as dal, paneer, chickpeas, rajma or curd, plus vegetables."
+      }
+    },
+    {
+      when: "At least 3 hours before kick-off",
+      ideas: {
+        everything: "A balanced meal, such as rice with chicken and vegetables, or a sandwich with fruit. Keep it low in grease.",
+        eggs: "A balanced meal, such as rice with dal and vegetables, or an egg sandwich with fruit. Keep it low in grease.",
+        vegetarian: "A balanced meal, such as rice with dal and vegetables, or a paneer sandwich with fruit. Keep it low in grease."
+      }
+    },
+    {
+      when: "In the last hour before kick-off",
+      ideas: "Only a light carbohydrate snack, such as a banana or a cereal bar. Avoid heavy, greasy or high-protein foods, which digest slowly. Skip caffeinated energy drinks."
+    },
+    {
+      when: "Within an hour after training or a match",
+      ideas: {
+        everything: "Protein and carbohydrate, such as milk and a banana, eggs on toast, or rice with dal or chicken.",
+        eggs: "Protein and carbohydrate, such as milk and a banana, eggs on toast, or rice with dal.",
+        vegetarian: "Protein and carbohydrate, such as milk and a banana, curd with fruit, a paneer wrap, or rice with dal."
+      }
+    },
+    {
+      when: "Every day",
+      ideas: "Three regular meals with fruit and vegetables. Do not skip breakfast."
+    }
   ],
   tips: [
     "You are still growing, so eat regular meals. Do not cut food to lose weight.",
     "Limit fizzy drinks, sweets and fried food, especially before a match."
   ],
+  foodTips: {
+    everything: [],
+    eggs: [
+      "Combine foods like rice with dal, or roti with curd, and spread your protein across the day instead of eating it all in one or two meals.",
+      "Vegetarian players should speak to a sports dietitian to make sure all their nutritional needs are met."
+    ],
+    vegetarian: [
+      "Combine foods like rice with dal, or roti with curd, and spread your protein across the day instead of eating it all in one or two meals.",
+      "Vegetarian players should speak to a sports dietitian to make sure all their nutritional needs are met."
+    ]
+  },
   source: "Sports Dietitians Australia, Fuelling Active Kids: Junior Soccer Player, a guide for parents, coaches and team managers."
 };
 
@@ -202,7 +261,7 @@ const POSITION_DATA = {
   "full-back": {
     label: "Full-back",
     hydrationNote: "Full-backs cover a lot of ground up and down the touchline, so drink at every break in play, such as throw-ins and goal kicks.",
-    dietFocus: "Strength and power matter for you, so include some protein at every meal. Most players get enough from normal foods like eggs, dal, chicken, fish and dairy.",
+    dietFocus: "Lots of running means you need plenty of carbohydrate for energy.",
     injuryRisks: [
       "Hamstring strains from repeated sprinting",
       "Ankle sprains when tackling and changing direction",
@@ -244,7 +303,8 @@ const POSITION_DATA = {
         exercises: [
           { name: "Side-shuffle cones", detail: "5 cones, 2m apart. Shuffle through facing forward. 4 rounds." },
           { name: "Zig-zag runs", detail: "Run a zig-zag through 6 cones as fast as you can. 4 rounds." },
-          { name: "Jockeying drill", detail: "A partner dribbles at you. Back up on your toes for 30 seconds. 4 rounds." }
+          { name: "Jockeying drill", detail: "A partner dribbles at you. Back up on your toes for 30 seconds. 4 rounds." },
+          { name: "Pressure, cover and balance", detail: "With two teammates, practise your shape: the closest player pressures the ball, the second covers behind, and the third balances the far side. Swap roles every 2 minutes." }
         ]
       }
     }
@@ -253,7 +313,7 @@ const POSITION_DATA = {
   "centre-back": {
     label: "Centre-back",
     hydrationNote: "Centre-backs run less than other outfield players but make many short, hard efforts. Drink at every stoppage, especially before and after set pieces.",
-    dietFocus: "Strength and power matter most for you, so include protein at every meal along with your carbohydrate.",
+    dietFocus: "Strength and power matter for you, so include some protein at every meal. Your food choices are in the list below.",
     injuryRisks: [
       "Ankle sprains when landing after heading the ball",
       "Hamstring strains when turning to chase a long ball",
@@ -295,7 +355,8 @@ const POSITION_DATA = {
         exercises: [
           { name: "Side-shuffle and turn", detail: "Shuffle 5m, turn and sprint 10m. 6 reps." },
           { name: "Cone footwork", detail: "Quick feet through 6 cones, then a 10m sprint. 4 rounds." },
-          { name: "Header practice", detail: "With a coach, practise timing a jump to meet a thrown ball. 8 reps." }
+          { name: "Header practice", detail: "With a coach, practise timing a jump to meet a thrown ball. 8 reps." },
+          { name: "Pressure, cover and balance", detail: "With two teammates, practise your shape: the closest player pressures the ball, the second covers behind, and the third balances the far side. Swap roles every 2 minutes." }
         ]
       }
     }
