@@ -1,17 +1,21 @@
 /* =====================================================
    app.js
-   Connects the page to the engine: reads the form,
+   Connects the page to the engine: reads the forms,
    shows the results, and switches between the screens.
    ===================================================== */
 
 const welcomeView = document.getElementById("view-welcome");
 const formView = document.getElementById("view-form");
+const testView = document.getElementById("view-test");
 const resultsView = document.getElementById("view-results");
 const form = document.getElementById("player-form");
 const formError = document.getElementById("form-error");
+const testForm = document.getElementById("test-form");
+const testError = document.getElementById("test-error");
 const summaryBox = document.getElementById("player-summary");
 const startBtn = document.getElementById("start-btn");
 const backBtn = document.getElementById("back-btn");
+const testBackBtn = document.getElementById("test-back-btn");
 const editBtn = document.getElementById("edit-btn");
 
 const tabButtons = document.querySelectorAll(".tab");
@@ -56,10 +60,11 @@ function daysText(count) {
 }
 
 /* ---------- SCREENS AND TABS ---------- */
-// Only one of the three screens is visible at a time.
+// Only one of the four main screens is visible at a time.
 function showScreen(name) {
   welcomeView.classList.toggle("hidden", name !== "welcome");
   formView.classList.toggle("hidden", name !== "form");
+  testView.classList.toggle("hidden", name !== "test");
   resultsView.classList.toggle("hidden", name !== "results");
 }
 
@@ -96,6 +101,17 @@ function showWeek(weekIndex) {
   const week = plan.weeks[weekIndex];
 
   exercisePanel.textContent = "";
+
+  // Level and test results (shown above the week buttons)
+  addHeading(exercisePanel, "Your level: " + plan.levelLabel);
+  exercisePanel.appendChild(el("p", "plan-intro", plan.levelNote));
+  if (plan.ratings) {
+    const ratingList = el("ul", "plain-list");
+    plan.ratings.forEach(function (r) {
+      ratingList.appendChild(el("li", null, r.test + ": " + r.result + " (" + r.rating + ")"));
+    });
+    exercisePanel.appendChild(ratingList);
+  }
 
   // Week buttons
   const weekTabs = el("div", "week-tabs");
@@ -233,10 +249,23 @@ backBtn.addEventListener("click", function () {
   showScreen("welcome");
 });
 
-/* ---------- WHEN THE FORM IS SUBMITTED ---------- */
+testBackBtn.addEventListener("click", function () {
+  showScreen("form");
+});
+
+/* ---------- STEP 1: YOUR DETAILS ---------- */
+// The browser checks the required fields first. If they pass, go to the fitness check.
 form.addEventListener("submit", function (event) {
-  event.preventDefault();   // stops the page from reloading
+  event.preventDefault();
   formError.textContent = "";
+  showScreen("test");
+  document.getElementById("mile").focus();
+});
+
+/* ---------- STEP 2: FITNESS CHECK, THEN THE PLAN ---------- */
+testForm.addEventListener("submit", function (event) {
+  event.preventDefault();
+  testError.textContent = "";
 
   const age = document.getElementById("age").value;
   const weight = document.getElementById("weight").value;
@@ -246,20 +275,34 @@ form.addEventListener("submit", function (event) {
   const climate = document.getElementById("climate").value;
   const food = document.getElementById("food").value;
 
-  const plan = buildWeeklyPlan(position, days, age);
+  const fitness = getFitnessLevel(
+    age,
+    document.getElementById("mile").value,
+    document.getElementById("sprint").value,
+    document.getElementById("burpees").value
+  );
+
+  if (!fitness) {
+    testError.textContent = "Please check your fitness results. Mile time as minutes and seconds, like 8:30. Sprint between 8 and 25 seconds. Burpees a whole number from 0 to 120.";
+    return;
+  }
+
+  const plan = buildWeeklyPlan(position, days, age, fitness.level);
   const diet = buildDiet(position, weight, height, food);
   const hydration = buildHydration(position, weight, climate);
   const injury = buildInjury(position);
 
   if (!plan || !diet || !hydration || !injury) {
-    formError.textContent = "Something is not right with your details. Please check them and try again.";
+    testError.textContent = "Something is not right with your details. Go back and check them.";
     return;
   }
+
+  plan.ratings = fitness.ratings;
 
   summaryBox.textContent =
     plan.positionLabel + " | Age " + Number(age) + " | " +
     Number(weight) + " kg | " + Number(height) + " cm | " +
-    daysText(plan.daysPerWeek) + " a week";
+    daysText(plan.daysPerWeek) + " a week | " + plan.levelLabel;
 
   renderExercisePlan(plan);
   renderDiet(diet);
@@ -271,7 +314,7 @@ form.addEventListener("submit", function (event) {
 });
 
 /* ---------- EDIT MY DETAILS ---------- */
-// Goes back to the form with the old values still filled in,
+// Goes back to the first form with the old values still filled in,
 // so the player can change one thing and generate a new plan.
 editBtn.addEventListener("click", function () {
   showScreen("form");

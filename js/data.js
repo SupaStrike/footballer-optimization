@@ -255,6 +255,47 @@ const INJURY_SHARED = {
 /* ---------- 6b. EXERCISE SOURCE ---------- */
 const EXERCISE_SOURCE = "Bujnovsky et al. (2019), Sports 7(2): 46, and Causevic et al. (2025), Sensors 25(18): 5825. Both studies found that physical demands differ by playing position.";
 
+/* ---------- 8. FITNESS CHECK (sets the starting level) ---------- */
+// Cut-offs are rough approximations for footballers aged 12-20, NOT taken from a source yet.
+// Check them with your expert before presenting the project.
+// Mile times are in seconds (450 = 7:30). Sprint times are in seconds. Burpees are reps in 60 seconds.
+// "advanced" is the score a player needs for 2 points, "intermediate" for 1 point.
+const FITNESS_NORMS = {
+  "12-14": {
+    mileSec: { advanced: 450, intermediate: 570 },
+    sprintSec: { advanced: 15.0, intermediate: 17.0 },
+    burpees: { advanced: 20, intermediate: 12 }
+  },
+  "15-17": {
+    mileSec: { advanced: 420, intermediate: 525 },
+    sprintSec: { advanced: 13.8, intermediate: 15.5 },
+    burpees: { advanced: 25, intermediate: 15 }
+  },
+  "18-20": {
+    mileSec: { advanced: 390, intermediate: 495 },
+    sprintSec: { advanced: 13.0, intermediate: 14.8 },
+    burpees: { advanced: 30, intermediate: 18 }
+  }
+};
+
+const LEVEL_LABELS = {
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  advanced: "Advanced"
+};
+
+const LEVEL_NOTES = {
+  beginner: "Your fitness check suggests you are starting out. Focus on technique, take full rests, and stop an exercise if you feel unwell.",
+  intermediate: "Your fitness check suggests you are building a solid base. Follow the plan as written and move up the weeks steadily.",
+  advanced: "Your fitness check suggests a strong base. Keep your technique sharp, and take the lighter Week 4 seriously so you do not overload."
+};
+
+const LEVEL_STRENGTH_NOTE = {
+  beginner: "Start at the lower end of the sets and focus on form.",
+  intermediate: "",
+  advanced: "Aim for the upper end of the sets once your technique is solid."
+};
+
 /* ---------- 7. POSITION DATA (only what differs between positions) ---------- */
 const POSITION_DATA = {
 

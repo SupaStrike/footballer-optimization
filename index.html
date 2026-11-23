@@ -4,46 +4,86 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Footballer Optimization</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%2322c55e'/%3E%3C/svg%3E">
 </head>
 <body>
 
   <header class="topbar">
-    <h1>Footballer Optimization</h1>
-    <p>Free, position-based training guidance for footballers aged 12-20</p>
+    <div class="brand">
+      <span class="brand-ball" aria-hidden="true"></span>
+      <span>Footballer Optimization</span>
+    </div>
+    <nav class="nav" aria-label="Main">
+      <button type="button" class="nav-link" id="nav-home">Home</button>
+      <button type="button" class="nav-link" id="nav-assess">Assessment</button>
+      <button type="button" class="nav-link" id="nav-learn">Learn</button>
+      <button type="button" class="nav-cta" id="nav-start">Start</button>
+    </nav>
   </header>
 
   <main>
 
-    <!-- SCREEN 1: WELCOME -->
+    <!-- SCREEN 1: WELCOME (hero) -->
     <section id="view-welcome" class="view welcome">
 
-      <h2 class="welcome-title">Train for your position</h2>
-      <p class="welcome-lead">A free plan built around your position, age, size and the days you can train.</p>
+      <span class="eyebrow">Free &middot; For players aged 12 to 20</span>
+      <h2 class="welcome-title">Train for your <span class="accent">position</span>.<br>Play your best.</h2>
+      <p class="welcome-lead">A free plan built around your position, age, size, fitness and the days you can train. No sign-up, no cost.</p>
+
+      <div class="hero-actions">
+        <button type="button" id="start-btn" class="primary-btn">Start your assessment</button>
+        <button type="button" id="learn-btn" class="outline-btn">Learn the theory</button>
+      </div>
+
+      <ul class="stats">
+        <li><strong>7</strong><span>positions</span></li>
+        <li><strong>4</strong><span>week plans</span></li>
+        <li><strong>3</strong><span>quick fitness tests</span></li>
+      </ul>
 
       <ul class="feature-grid">
         <li class="feature">
+          <span class="feature-num">01</span>
           <h3>Position-based training</h3>
           <p>Four-week plans that change with your position, age and training days.</p>
         </li>
         <li class="feature">
+          <span class="feature-num">02</span>
           <h3>Food and hydration</h3>
           <p>Meal timing and fluid amounts matched to your weight and the weather.</p>
         </li>
         <li class="feature">
+          <span class="feature-num">03</span>
           <h3>Injury prevention</h3>
           <p>A warm-up based on research, plus the injury risks for your position.</p>
         </li>
       </ul>
 
-      <button type="button" id="start-btn" class="primary-btn">Get started</button>
-      <button type="button" id="learn-btn" class="outline-btn">Learn the theory</button>
+      <h3 class="steps-title">How it works</h3>
+      <div class="steps">
+        <div class="step">
+          <h4>Your details</h4>
+          <p>Age, weight, height, position, training days and climate.</p>
+        </div>
+        <div class="step">
+          <h4>Quick fitness check</h4>
+          <p>A mile, a 100 m sprint and burpees set your starting level.</p>
+        </div>
+        <div class="step">
+          <h4>Your plan</h4>
+          <p>Four weeks of training, plus food, hydration and injury advice.</p>
+        </div>
+      </div>
+
       <p class="welcome-note">Free to use. No sign-up. Your details are not sent anywhere.</p>
 
     </section>
 
-    <!-- SCREEN 2: FORM -->
+    <!-- SCREEN 2: YOUR DETAILS -->
     <section id="view-form" class="view hidden">
       <form id="player-form">
 
@@ -108,7 +148,7 @@
           </select>
         </div>
 
-        <button type="submit">Generate my plan</button>
+        <button type="submit">Next: quick fitness check</button>
         <p id="form-error" class="form-error" role="alert"></p>
 
       </form>
@@ -116,7 +156,37 @@
       <button type="button" id="back-btn" class="link-btn">&larr; Back to start</button>
     </section>
 
-    <!-- SCREEN 3: RESULTS -->
+    <!-- SCREEN 3: QUICK FITNESS CHECK -->
+    <section id="view-test" class="view hidden">
+      <h2 class="screen-title">Quick fitness check</h2>
+      <p class="intro-text">These three tests set your starting level. Warm up first, and stop straight away if you feel unwell or dizzy. Do them on a field or a flat, safe space.</p>
+
+      <form id="test-form">
+
+        <div class="field">
+          <label for="mile">Mile time (minutes:seconds)</label>
+          <input type="text" id="mile" name="mile" placeholder="e.g. 8:30" pattern="[0-9]{1,2}:[0-5][0-9]" required>
+        </div>
+
+        <div class="field">
+          <label for="sprint">100 m sprint (seconds)</label>
+          <input type="number" id="sprint" name="sprint" min="8" max="25" step="0.01" placeholder="e.g. 15.20" required>
+        </div>
+
+        <div class="field">
+          <label for="burpees">Burpees in 60 seconds</label>
+          <input type="number" id="burpees" name="burpees" min="0" max="120" step="1" placeholder="e.g. 14" required>
+        </div>
+
+        <button type="submit">Generate my plan</button>
+        <p id="test-error" class="form-error" role="alert"></p>
+
+      </form>
+
+      <button type="button" id="test-back-btn" class="link-btn">&larr; Back to my details</button>
+    </section>
+
+    <!-- SCREEN 4: RESULTS -->
     <section id="view-results" class="view hidden">
 
       <div id="player-summary"></div>
@@ -148,10 +218,10 @@
 
     </section>
 
-    <!-- SCREEN 4: LEARN THE THEORY -->
+    <!-- SCREEN 5: LEARN THE THEORY -->
     <section id="view-learn" class="view hidden">
 
-      <h2 class="welcome-title">Learn the theory</h2>
+      <h2 class="screen-title">Learn the theory</h2>
 
       <div id="learn-tabs" class="week-tabs learn-tabs"></div>
       <div id="learn-content" class="tab-panel"></div>
@@ -169,5 +239,37 @@
   <script src="js/engine.js"></script>
   <script src="js/app.js"></script>
   <script src="js/learn.js"></script>
+
+  <!-- Navigation: uses the buttons that already exist on each screen -->
+  <script>
+    (function () {
+      function $(id) { return document.getElementById(id); }
+
+      // Always close the Learn screen first, so only one screen shows
+      function closeLearnFirst() { $("learn-back-btn").click(); }
+
+      function goHome() {
+        closeLearnFirst();
+        $("back-btn").click();
+      }
+
+      $("nav-home").addEventListener("click", goHome);
+
+      $("nav-assess").addEventListener("click", function () {
+        closeLearnFirst();
+        $("start-btn").click();
+      });
+
+      $("nav-start").addEventListener("click", function () {
+        closeLearnFirst();
+        $("start-btn").click();
+      });
+
+      $("nav-learn").addEventListener("click", function () {
+        goHome();
+        $("learn-btn").click();
+      });
+    })();
+  </script>
 </body>
 </html>

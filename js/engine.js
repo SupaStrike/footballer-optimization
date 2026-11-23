@@ -51,7 +51,72 @@ function getBmiBand(weightKg, heightCm) {
   return "normal";
 }
 
-/* ---------- 4. FIND ONE SESSION ---------- */
+/* ---------- 4. FITNESS CHECK ---------- */
+// Reads a mile time typed as "m:ss" (for example "8:30") and returns seconds.
+// Returns null if the text is not in that format.
+function parseMileSeconds(text) {
+  const m = /^\s*(\d{1,2}):([0-5]\d)\s*$/.exec(String(text || ""));
+  if (!m) return null;
+  const total = Number(m[1]) * 60 + Number(m[2]);
+  return total > 0 ? total : null;
+}
+
+// Turns seconds back into "m:ss" for the screen.
+function formatMile(totalSeconds) {
+  const mins = Math.floor(totalSeconds / 60);
+  const secs = totalSeconds % 60;
+  return mins + ":" + (secs < 10 ? "0" : "") + secs;
+}
+
+// Gives 0, 1 or 2 points for one test.
+// lowerIsBetter is true for times, false for counts.
+function ratePoints(value, rule, lowerIsBetter) {
+  if (lowerIsBetter) {
+    if (value <= rule.advanced) return 2;
+    if (value <= rule.intermediate) return 1;
+    return 0;
+  }
+  if (value >= rule.advanced) return 2;
+  if (value >= rule.intermediate) return 1;
+  return 0;
+}
+
+// Works out the starting level from the three tests.
+// Returns { level, ratings } or null if any input is invalid.
+// Total points: 0-1 beginner, 2-4 intermediate, 5-6 advanced.
+function getFitnessLevel(age, mileText, sprintSec, burpees) {
+  const band = getAgeBand(age);
+  if (!band) return null;
+
+  const mile = parseMileSeconds(mileText);
+  const sprint = Number(sprintSec);
+  const reps = Number(burpees);
+
+  if (mile === null) return null;
+  if (!(sprint >= 8 && sprint <= 25)) return null;
+  if (!Number.isInteger(reps) || reps < 0 || reps > 120) return null;
+
+  const norms = FITNESS_NORMS[band];
+  const mileP = ratePoints(mile, norms.mileSec, true);
+  const sprintP = ratePoints(sprint, norms.sprintSec, true);
+  const repsP = ratePoints(reps, norms.burpees, false);
+  const total = mileP + sprintP + repsP;
+
+  const level = total <= 1 ? "beginner" : (total <= 4 ? "intermediate" : "advanced");
+
+  const word = function (p) { return ["beginner", "intermediate", "advanced"][p]; };
+
+  return {
+    level: level,
+    ratings: [
+      { test: "Mile time", result: formatMile(mile), rating: word(mileP) },
+      { test: "100 m sprint", result: sprint.toFixed(2) + " s", rating: word(sprintP) },
+      { test: "Burpees in 60 s", result: reps + " reps", rating: word(repsP) }
+    ]
+  };
+}
+
+/* ---------- 5. FIND ONE SESSION ---------- */
 // Looks up a session by type, e.g. getSession("striker", "speed").
 // Recovery is shared by all positions; the others belong to the position.
 // Returns null if nothing matches.
@@ -61,13 +126,13 @@ function getSession(position, type) {
   return POSITION_DATA[position].sessions[type] || null;
 }
 
-/* ---------- 5. BUILD THE FOUR-WEEK PLAN ---------- */
-// Combines position + training days per week (1-7) + age into four weeks.
+/* ---------- 6. BUILD THE FOUR-WEEK PLAN ---------- */
+// Combines position + training days per week (1-7) + age + level into four weeks.
 // "core" days rotate through strength, speed, endurance and agility from
-// week to week, so even a 1-day player gets every type over the month.
-// Strength sessions also get the sets and safety note for the player's age.
+// week to week. Strength sessions get the sets and safety note for the
+// player's age, plus a note for their level.
 // Returns null if any input is not valid.
-function buildWeeklyPlan(position, trainingDays, age) {
+function buildWeeklyPlan(position, trainingDays, age, level) {
   const dayCount = Number(trainingDays);
   const ageBand = getAgeBand(age);
 
@@ -77,7 +142,9 @@ function buildWeeklyPlan(position, trainingDays, age) {
   const template = WEEK_TEMPLATES[dayCount];
   if (!template || !ageBand) return null;
 
+  const levelKey = has(LEVEL_NOTES, level) ? level : "intermediate";
   const rules = AGE_BANDS[ageBand];
+  const strengthNote = (rules.note + " " + LEVEL_STRENGTH_NOTE[levelKey]).trim();
 
   const weeks = WEEK_PHASES.map(function (phase, weekIndex) {
     let coreSlot = 0;
@@ -102,7 +169,7 @@ function buildWeeklyPlan(position, trainingDays, age) {
 
       if (type === "strength") {
         entry.sets = rules.sets;
-        entry.ageNote = rules.note;
+        entry.ageNote = strengthNote;
       }
       return entry;
     }).filter(Boolean);
@@ -120,12 +187,15 @@ function buildWeeklyPlan(position, trainingDays, age) {
     positionLabel: pos.label,
     daysPerWeek: dayCount,
     ageBand: ageBand,
+    level: levelKey,
+    levelLabel: LEVEL_LABELS[levelKey],
+    levelNote: LEVEL_NOTES[levelKey],
     weeks: weeks,
     source: EXERCISE_SOURCE
   };
 }
 
-/* ---------- 6. BUILD THE HYDRATION ADVICE ---------- */
+/* ---------- 7. BUILD THE HYDRATION ADVICE ---------- */
 // The amount depends on body weight and climate; the extra note depends on position.
 // Returns null if the position, weight or climate is not valid.
 function buildHydration(position, weightKg, climate) {
@@ -151,7 +221,7 @@ function buildHydration(position, weightKg, climate) {
   };
 }
 
-/* ---------- 7. BUILD THE DIET ADVICE ---------- */
+/* ---------- 8. BUILD THE DIET ADVICE ---------- */
 // Shared meals for everyone, with food ideas that match what the player eats,
 // a focus line for the position, and a note based on BMI (null when normal).
 // Returns null if the position or food type is not valid.
@@ -181,7 +251,7 @@ function buildDiet(position, weightKg, heightCm, food) {
   };
 }
 
-/* ---------- 8. BUILD THE INJURY PREVENTION ADVICE ---------- */
+/* ---------- 9. BUILD THE INJURY PREVENTION ADVICE ---------- */
 // Shared warm-up and habits for everyone, plus the injury risks for the position.
 // Returns null if the position is not valid.
 function buildInjury(position) {
