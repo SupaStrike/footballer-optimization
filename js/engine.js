@@ -81,6 +81,13 @@ function ratePoints(value, rule, lowerIsBetter) {
   return 0;
 }
 
+// World records are used as the limits: nobody can enter a result better than these.
+const RECORDS = {
+  mileSec: 222,      // 3:42, rounded down from Josh Kerr's 3:42.66 (2026)
+  sprintSec: 9.58,   // Usain Bolt, 100 m, 2009
+  burpees: 50        // Most burpees in one minute (male), He Xu, 2024
+};
+
 // Works out the starting level from the three tests.
 // Returns { level, ratings } or null if any input is invalid.
 // Total points: 0-1 beginner, 2-4 intermediate, 5-6 advanced.
@@ -92,9 +99,9 @@ function getFitnessLevel(age, mileText, sprintSec, burpees) {
   const sprint = Number(sprintSec);
   const reps = Number(burpees);
 
-  if (mile === null) return null;
-  if (!(sprint >= 8 && sprint <= 25)) return null;
-  if (!Number.isInteger(reps) || reps < 0 || reps > 120) return null;
+  if (mile === null || mile < RECORDS.mileSec) return null;
+  if (!(sprint >= RECORDS.sprintSec && sprint <= 25)) return null;
+  if (!Number.isInteger(reps) || reps < 0 || reps > RECORDS.burpees) return null;
 
   const norms = FITNESS_NORMS[band];
   const mileP = ratePoints(mile, norms.mileSec, true);

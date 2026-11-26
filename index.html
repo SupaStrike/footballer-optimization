@@ -21,7 +21,6 @@
       <button type="button" class="nav-link" id="nav-home">Home</button>
       <button type="button" class="nav-link" id="nav-assess">Assessment</button>
       <button type="button" class="nav-link" id="nav-learn">Learn</button>
-      <button type="button" class="nav-cta" id="nav-start">Start</button>
     </nav>
   </header>
 
@@ -165,17 +164,17 @@
 
         <div class="field">
           <label for="mile">Mile time (minutes:seconds)</label>
-          <input type="text" id="mile" name="mile" placeholder="e.g. 8:30" pattern="[0-9]{1,2}:[0-5][0-9]" required>
+          <input type="text" id="mile" name="mile" placeholder="e.g. 8:30" title="Minutes and seconds, for example 8:30" pattern="[0-9]{1,2}:[0-5][0-9]" required>
         </div>
 
         <div class="field">
           <label for="sprint">100 m sprint (seconds)</label>
-          <input type="number" id="sprint" name="sprint" min="8" max="25" step="0.01" placeholder="e.g. 15.20" required>
+          <input type="number" id="sprint" name="sprint" min="9.58" max="25" step="0.01" placeholder="e.g. 15.20" required>
         </div>
 
         <div class="field">
           <label for="burpees">Burpees in 60 seconds</label>
-          <input type="number" id="burpees" name="burpees" min="0" max="120" step="1" placeholder="e.g. 14" required>
+          <input type="number" id="burpees" name="burpees" min="0" max="50" step="1" placeholder="e.g. 14" required>
         </div>
 
         <button type="submit">Generate my plan</button>
@@ -233,6 +232,7 @@
 
   <footer>
     <p>General guidance only. Not medical advice. Speak to a coach or doctor if unsure.</p>
+    <p class="credit">Hero photo by <a href="https://unsplash.com/@omarvellous14" target="_blank" rel="noopener">Omar Ramadan</a> on <a href="https://unsplash.com" target="_blank" rel="noopener">Unsplash</a>.</p>
   </footer>
 
   <script src="js/data.js"></script>
@@ -240,35 +240,26 @@
   <script src="js/app.js"></script>
   <script src="js/learn.js"></script>
 
-  <!-- Navigation: uses the buttons that already exist on each screen -->
+  <!-- Navigation: calls the screen functions directly, so it works from any screen -->
   <script>
     (function () {
       function $(id) { return document.getElementById(id); }
 
-      // Always close the Learn screen first, so only one screen shows
-      function closeLearnFirst() { $("learn-back-btn").click(); }
-
-      function goHome() {
-        closeLearnFirst();
-        $("back-btn").click();
+      // Shows one main screen and closes the Learn screen if it is open
+      function goTo(name) {
+        closeLearn();
+        showScreen(name);
       }
 
-      $("nav-home").addEventListener("click", goHome);
+      // Hides every main screen, then opens the Learn screen
+      function openLearnScreen() {
+        showScreen("none");
+        openLearn();
+      }
 
-      $("nav-assess").addEventListener("click", function () {
-        closeLearnFirst();
-        $("start-btn").click();
-      });
-
-      $("nav-start").addEventListener("click", function () {
-        closeLearnFirst();
-        $("start-btn").click();
-      });
-
-      $("nav-learn").addEventListener("click", function () {
-        goHome();
-        $("learn-btn").click();
-      });
+      $("nav-home").addEventListener("click", function () { goTo("welcome"); });
+      $("nav-assess").addEventListener("click", function () { goTo("form"); });
+      $("nav-learn").addEventListener("click", openLearnScreen);
     })();
   </script>
 </body>

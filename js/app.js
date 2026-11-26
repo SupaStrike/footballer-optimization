@@ -18,8 +18,9 @@ const backBtn = document.getElementById("back-btn");
 const testBackBtn = document.getElementById("test-back-btn");
 const editBtn = document.getElementById("edit-btn");
 
-const tabButtons = document.querySelectorAll(".tab");
-const tabPanels = document.querySelectorAll(".tab-panel");
+// Only the tabs and panels inside the results screen, so Learn is not hidden too
+const tabButtons = document.querySelectorAll("#view-results .tab");
+const tabPanels = document.querySelectorAll("#view-results .tab-panel");
 
 const exercisePanel = document.getElementById("tab-exercise");
 const dietPanel = document.getElementById("tab-diet");
@@ -61,6 +62,7 @@ function daysText(count) {
 
 /* ---------- SCREENS AND TABS ---------- */
 // Only one of the four main screens is visible at a time.
+// Pass "none" to hide them all (used when the Learn screen opens).
 function showScreen(name) {
   welcomeView.classList.toggle("hidden", name !== "welcome");
   formView.classList.toggle("hidden", name !== "form");
@@ -253,6 +255,34 @@ testBackBtn.addEventListener("click", function () {
   showScreen("form");
 });
 
+/* ---------- WORLD RECORD LIMITS ON THE FITNESS CHECK ---------- */
+// The browser shows these messages straight away, like it does for burpees.
+const mileInput = document.getElementById("mile");
+const sprintInput = document.getElementById("sprint");
+
+mileInput.addEventListener("input", function () {
+  const seconds = parseMileSeconds(mileInput.value);
+  if (mileInput.value === "") {
+    mileInput.setCustomValidity("");
+  } else if (seconds === null) {
+    mileInput.setCustomValidity("Use minutes and seconds, like 8:30.");
+  } else if (seconds < RECORDS.mileSec) {
+    mileInput.setCustomValidity("Nobody can beat the mile world record of 3:42.");
+  } else {
+    mileInput.setCustomValidity("");
+  }
+});
+
+sprintInput.addEventListener("input", function () {
+  const seconds = Number(sprintInput.value);
+  if (sprintInput.value !== "" && seconds < RECORDS.sprintSec) {
+    sprintInput.setCustomValidity("Nobody can beat the 100 m world record of 9.58 seconds.");
+  } else {
+    sprintInput.setCustomValidity("");
+  }
+});
+
+
 /* ---------- STEP 1: YOUR DETAILS ---------- */
 // The browser checks the required fields first. If they pass, go to the fitness check.
 form.addEventListener("submit", function (event) {
@@ -283,7 +313,7 @@ testForm.addEventListener("submit", function (event) {
   );
 
   if (!fitness) {
-    testError.textContent = "Please check your fitness results. Mile time as minutes and seconds, like 8:30. Sprint between 8 and 25 seconds. Burpees a whole number from 0 to 120.";
+    testError.textContent = "Please check your fitness results. Mile time as minutes and seconds, like 8:30, and no faster than 3:42. Sprint between 9.58 and 25 seconds. Burpees a whole number from 0 to 50.";
     return;
   }
 

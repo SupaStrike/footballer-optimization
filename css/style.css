@@ -167,7 +167,7 @@ footer {
   border-radius: 22px;
   overflow: hidden;
   background:
-    linear-gradient(160deg, rgba(11, 11, 11, 0.94) 25%, rgba(11, 11, 11, 0.7) 100%),
+    linear-gradient(160deg, rgba(11, 11, 11, 0.88) 15%, rgba(11, 11, 11, 0.6) 100%),
     url("../images/hero.jpg") center / cover no-repeat,
     var(--surface);
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55);
@@ -771,6 +771,24 @@ button[type="submit"]:focus-visible {
   display: block;
   border-radius: 10px;
 }
+
+/* ---------- CREDITS ---------- */
+.credit {
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+  opacity: 0.8;
+}
+
+.credit a {
+  color: var(--green);
+  text-decoration: none;
+}
+
+.credit a:hover {
+  text-decoration: underline;
+}
+
+
 
 /* ---------- 11. SMALL SCREENS (tablets and phones) ---------- */
 @media (max-width: 860px) {
